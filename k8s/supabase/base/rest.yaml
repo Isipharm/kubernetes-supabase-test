@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rest
+  labels:
+    app: rest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rest
+  template:
+    metadata:
+      labels:
+        app: rest
+    spec:
+      initContainers:
+      - name: check-db-ready
+        image: postgres:13-alpine
+        command: ['sh', '-c', 
+          'until pg_isready -h $(POSTGRES_HOST) -p $(POSTGRES_PORT) -U postgres; do echo waiting for database; sleep 2; done;']
+        env:
+        - name: PGPASSWORD
+          value: $(POSTGRES_PASSWORD)
+        envFrom:
+          - configMapRef:
+              name: supabase-common-config
+          - secretRef:
+              name: supabase-common-secrets
+      containers:
+      - name: rest
+        image: postgrest/postgrest
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        env:
+        - name: PGRST_DB_URI
+          value: postgres://authenticator:$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)
+        - name: PGRST_DB_SCHEMAS
+          value: $(PGRST_DB_SCHEMAS)
+        - name: PGRST_DB_ANON_ROLE
+          value: anon
+        - name: PGRST_JWT_SECRET
+          value: $(JWT_SECRET)
+        - name: PGRST_DB_USE_LEGACY_GUCS
+          value: "false"
+        - name: PGRST_APP_SETTINGS_JWT_SECRET
+          value: $(JWT_SECRET)
+        - name: PGRST_APP_SETTINGS_JWT_EXP
+          value: $(JWT_EXPIRY)
+        envFrom:
+          - configMapRef:
+              name: supabase-common-config
+          - secretRef:
+              name: supabase-common-secrets

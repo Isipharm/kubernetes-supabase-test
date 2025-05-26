@@ -7,19 +7,25 @@ namePrefix: supabase-
 resources:
   - namespace.yaml
   - db.yaml
+  - auth.yaml
+  - rest.yaml
+  - realtime.yaml
 
 configMapGenerator:
   - name: supabase-common-config
     env: .env
   - name: postgres-init-scripts
     files:
-      - 97-_supabase.sql=init-scripts/_supabase.sql
-      - 98-webhooks.sql=init-scripts/webhooks.sql
-      - 99-jwt.sql=init-scripts/jwt.sql
-      - 99-logs.sql=init-scripts/logs.sql
-      - 99-pooler.sql=init-scripts/pooler.sql
-      - 99-realtime.sql=init-scripts/realtime.sql
-      - 99-roles.sql=init-scripts/roles.sql
+      - 97-_supabase.sql=custom-init-scripts/_supabase.sql
+      - 98-webhooks.sql=custom-init-scripts/webhooks.sql
+      - 99-jwt.sql=custom-init-scripts/jwt.sql
+      - 99-roles.sql=custom-init-scripts/roles.sql
+      - 99-realtime.sql=custom-init-scripts/realtime.sql
+      - 99-logs.sql=custom-init-scripts/logs.sql
+      - 99-pooler.sql=custom-init-scripts/pooler.sql
+  - name: postgres-migration-scripts
+    files:
+      - 20250526235959_mon_leo_schema.sql=custom-migrations/20250526235959_mon_leo_schema.sql
 
 secretGenerator:
   - name: supabase-common-secrets
@@ -30,3 +36,12 @@ images:
   - name: supabase/postgres
     newName: supabase/postgres
     newTag: 15.8.1.060
+  - name: supabase/gotrue
+    newName: supabase/gotrue
+    newTag: v2.172.1
+  - name: postgrest/postgrest
+    newName: postgrest/postgrest
+    newTag: v12.2.12
+  - name: supabase/realtime
+    newName: supabase/realtime
+    newTag: v2.34.47

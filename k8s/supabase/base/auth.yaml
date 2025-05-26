@@ -1,0 +1,134 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  labels:
+    app: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      initContainers:
+      - name: check-db-ready
+        image: postgres:13-alpine
+        command: ['sh', '-c', 
+          'until pg_isready -h $(POSTGRES_HOST) -p $(POSTGRES_PORT) -U postgres; do echo waiting for database; sleep 2; done;']
+        env:
+        - name: PGPASSWORD
+          value: $(POSTGRES_PASSWORD)
+        envFrom:
+          - configMapRef:
+              name: supabase-common-config
+          - secretRef:
+              name: supabase-common-secrets
+      containers:
+      - name: auth
+        image: supabase/gotrue
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        readinessProbe:
+          exec:
+            command: ["wget","--no-verbose","--tries=1","--spider","http://localhost:9999/health"]
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 3
+        livenessProbe:
+          exec:
+            command: ["wget","--no-verbose","--tries=1","--spider","http://localhost:9999/health"]
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 3
+        env:
+        - name: GOTRUE_API_HOST
+          value: 0.0.0.0
+        - name: GOTRUE_API_PORT
+          value: "9999"
+        - name: API_EXTERNAL_URL
+          value: $(API_EXTERNAL_URL)
+        
+        - name: GOTRUE_DB_DRIVER
+          value: postgres
+        - name: GOTRUE_DB_DATABASE_URL
+          value: postgres://supabase_auth_admin:$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)
+        
+        - name: GOTRUE_SITE_URL
+          value: $(SITE_URL)
+        - name: GOTRUE_URI_ALLOW_LIST
+          value: $(ADDITIONAL_REDIRECT_URLS)
+        - name: GOTRUE_DISABLE_SIGNUP
+          value: $(DISABLE_SIGNUP)
+        
+        - name: GOTRUE_JWT_ADMIN_ROLES
+          value: service_role
+        - name: GOTRUE_JWT_AUD
+          value: authenticated
+        - name: GOTRUE_JWT_DEFAULT_GROUP_NAME
+          value: authenticated
+        - name: GOTRUE_JWT_EXP
+          value: $(JWT_EXPIRY)
+        - name: GOTRUE_JWT_SECRET
+          value: $(JWT_SECRET)
+        
+        - name: GOTRUE_EXTERNAL_EMAIL_ENABLED
+          value: $(ENABLE_EMAIL_SIGNUP)
+        - name: GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED
+          value: $(ENABLE_ANONYMOUS_USERS)
+        - name: GOTRUE_MAILER_AUTOCONFIRM
+          value: $(ENABLE_EMAIL_AUTOCONFIRM)
+        
+        - name: GOTRUE_SMTP_ADMIN_EMAIL
+          value: $(SMTP_ADMIN_EMAIL)
+        - name: GOTRUE_SMTP_HOST
+          value: $(SMTP_HOST)
+        - name: GOTRUE_SMTP_PORT
+          value: $(SMTP_PORT)
+        - name: GOTRUE_SMTP_USER
+          value: $(SMTP_USER)
+        - name: GOTRUE_SMTP_PASS
+          value: $(SMTP_PASS)
+        - name: GOTRUE_SMTP_SENDER_NAME
+          value: $(SMTP_SENDER_NAME)
+        - name: GOTRUE_MAILER_URLPATHS_INVITE
+          value: $(MAILER_URLPATHS_INVITE)
+        - name: GOTRUE_MAILER_URLPATHS_CONFIRMATION
+          value: $(MAILER_URLPATHS_CONFIRMATION)
+        - name: GOTRUE_MAILER_URLPATHS_RECOVERY
+          value: $(MAILER_URLPATHS_RECOVERY)
+        - name: GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE
+          value: $(MAILER_URLPATHS_EMAIL_CHANGE)
+
+        - name: GOTRUE_EXTERNAL_PHONE_ENABLED
+          value: $(ENABLE_PHONE_SIGNUP)
+        - name: GOTRUE_SMS_AUTOCONFIRM
+          value: $(ENABLE_PHONE_AUTOCONFIRM)
+        envFrom:
+          - configMapRef:
+              name: supabase-common-config
+          - secretRef:
+              name: supabase-common-secrets
+---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: auth
+# spec:
+#   selector:
+#     app: auth
+#   ports:
+#   - port: 9999
+#     targetPort: 9999
+#     name: auth
+#   type: ClusterIP
