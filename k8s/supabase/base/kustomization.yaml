@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: supabase
+namePrefix: supabase-
+
+resources:
+  - namespace.yaml
+  - db.yaml
+
+configMapGenerator:
+  - name: supabase-common-config
+    env: .env
+  - name: postgres-init-scripts
+    files:
+      - 97-_supabase.sql=init-scripts/_supabase.sql
+      - 98-webhooks.sql=init-scripts/webhooks.sql
+      - 99-jwt.sql=init-scripts/jwt.sql
+      - 99-logs.sql=init-scripts/logs.sql
+      - 99-pooler.sql=init-scripts/pooler.sql
+      - 99-realtime.sql=init-scripts/realtime.sql
+      - 99-roles.sql=init-scripts/roles.sql
+
+secretGenerator:
+  - name: supabase-common-secrets
+    env: .env.secrets
+
+# Configuration des images utilisées
+images:
+  - name: supabase/postgres
+    newName: supabase/postgres
+    newTag: 15.8.1.060
