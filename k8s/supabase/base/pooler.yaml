@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pooler
+  labels:
+    app: pooler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pooler
+  template:
+    metadata:
+      labels:
+        app: pooler
+    spec:
+      initContainers:
+      - name: check-db-ready
+        image: postgres:13-alpine
+        command: ['sh', '-c']
+        args:
+          - |
+            echo "Waiting for database to be ready..."
+            until pg_isready -h supabase-db -p $(POSTGRES_PORT) -U postgres; do
+              echo "Waiting for database to start..."
+              sleep 2
+            done
+          - echo "Database is ready"
+        env:
+          - name: PGPASSWORD
+            value: $(POSTGRES_PASSWORD)
+          - name: POSTGRES_HOST
+            value: supabase-db
+          # supabase-db only for the pooler pod, other pods should use the pooler service host
+        envFrom:
+          - configMapRef:
+              name: supabase-common-config
+          - secretRef:
+              name: supabase-common-secrets
+      containers:
+      - name: pooler
+        image: supabase/supavisor
+        ports:
+        - containerPort: 5432
+        - containerPort: 6543
+        command: ["/bin/sh", "-c"]
+        args:
+        - /app/bin/migrate && /app/bin/supavisor eval "$$(cat /etc/pooler/pooler.exs)" && /app/bin/server
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        env:
+        - name: PORT
+          value: "4000"
+        - name: POSTGRES_PORT
+          value: $(POSTGRES_PORT)
+        - name: POSTGRES_DB
+          value: $(POSTGRES_DB)
+        - name: POSTGRES_PASSWORD
+          value: $(POSTGRES_PASSWORD)
+        - name: DATABASE_URL
+          value: ecto://supabase_admin:$(POSTGRES_PASSWORD)@supabase-db:$(POSTGRES_PORT)/_supabase
+        - name: CLUSTER_POSTGRES
+          value: "true"
+        - name: SECRET_KEY_BASE
+          value: $(SECRET_KEY_BASE)
+        - name: VAULT_ENC_KEY
+          value: $(VAULT_ENC_KEY)
+        - name: API_JWT_SECRET
+          value: $(JWT_SECRET)
+        - name: METRICS_JWT_SECRET
+          value: $(JWT_SECRET)
+        - name: REGION
+          value: local
+        - name: ERL_AFLAGS
+          value: -proto_dist inet_tcp
+        - name: POOLER_TENANT_ID
+          value: $(POOLER_TENANT_ID)
+        - name: POOLER_DEFAULT_POOL_SIZE
+          value: $(POOLER_DEFAULT_POOL_SIZE)
+        - name: POOLER_MAX_CLIENT_CONN
+          value: $(POOLER_MAX_CLIENT_CONN)
+        - name: POOLER_POOL_MODE
+          value: transaction
+        envFrom:
+          - configMapRef:
+              name: supabase-common-config
+          - secretRef:
+              name: supabase-common-secrets
+        volumeMounts:
+        - name: pooler-volume
+          mountPath: /etc/pooler/pooler.exs
+          subPath: pooler.exs
+          readOnly: true
+      volumes:
+      - name: pooler-volume
+        configMap:
+          name: pooler-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pooler
+spec:
+  selector:
+    app: pooler
+  ports:
+  - port: 5432
+    name: postgres
+    targetPort: 5432
+  - port: 6543
+    name: pooler
+    targetPort: 6543
+  type: ClusterIP

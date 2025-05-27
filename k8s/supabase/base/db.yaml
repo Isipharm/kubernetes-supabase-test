@@ -47,7 +47,6 @@ spec:
         # command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf", "-c", "log_min_messages=fatal"]
         ports:
         - containerPort: 5432
-          name: db
         resources:
           requests:
             memory: "256Mi"
@@ -131,60 +130,3 @@ spec:
   resources:
     requests:
       storage: 1Gi
----
-# apiVersion: batch/v1
-# kind: Job
-# metadata:
-#   name: supabase-migration
-# spec:
-#   ttlSecondsAfterFinished: 100
-#   template:
-#     spec:
-#       containers:
-#         - name: migration
-#           image: postgres:13-alpine
-#           env:
-#           - name: PGPASSWORD
-#             value: $(POSTGRES_PASSWORD)
-#           envFrom:
-#           - configMapRef:
-#               name: supabase-common-config
-#           - secretRef:
-#               name: supabase-common-secrets
-#           command: ["/bin/sh", "-c"]
-#           args:
-#             - |
-#               echo "Waiting for PostgreSQL to be ready..."
-#               until pg_isready -h $(POSTGRES_HOST).supabase -p $(POSTGRES_PORT) -U postgres; do
-#                 echo "PostgreSQL is unavailable - sleeping 5s"
-#                 sleep 5
-#               done
-              
-#               echo "PostgreSQL is up - executing migration scripts"
-#               for script in /init-scripts/*.sql; do
-#                 echo "Executing $script"
-#                 psql -h $(POSTGRES_HOST) -p $(POSTGRES_PORT) -U supabase_admin -d $(POSTGRES_DB) -f "$script"
-#               done
-
-#               #psql -h $(POSTGRES_HOST) -p $(POSTGRES_PORT) -U supabase_admin -d $(POSTGRES_DB) -f /migrations/20250526235959_mon_leo_schema.sql
-#               # Ajoute d'autres scripts si besoin
-#           resources:
-#             requests:
-#               memory: "128Mi"
-#               cpu: "100m"
-#             limits:
-#               memory: "256Mi"
-#               cpu: "200m"
-#           volumeMounts:
-#           - name: init-scripts
-#             mountPath: /init-scripts
-#           - name: migrations
-#             mountPath: /migrations
-#       restartPolicy: OnFailure
-#       volumes:
-#       - name: init-scripts
-#         configMap:
-#           name: postgres-init-scripts
-#       - name: migrations
-#         configMap:
-#           name: postgres-migration-scripts

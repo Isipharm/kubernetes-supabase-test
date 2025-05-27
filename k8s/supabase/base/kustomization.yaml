@@ -15,25 +15,33 @@ resources:
   - imgproxy.yaml
   - meta.yaml
   - functions.yaml
+  #- pooler.yaml  Pooler not working yet
 
 configMapGenerator:
   - name: supabase-common-config
     env: .env
   - name: postgres-init-scripts
     files:
-      - 97-_supabase.sql=custom-init-scripts/_supabase.sql
-      - 98-webhooks.sql=custom-init-scripts/webhooks.sql
-      - 99-jwt.sql=custom-init-scripts/jwt.sql
-      - 99-roles.sql=custom-init-scripts/roles.sql
-      - 99-realtime.sql=custom-init-scripts/realtime.sql
-      - 99-logs.sql=custom-init-scripts/logs.sql
-      - 99-pooler.sql=custom-init-scripts/pooler.sql
+      - 97-_supabase.sql=volumes/db/custom-init-scripts/_supabase.sql
+      - 98-webhooks.sql=volumes/db/custom-init-scripts/webhooks.sql
+      - 99-jwt.sql=volumes/db/custom-init-scripts/jwt.sql
+      - 99-roles.sql=volumes/db/custom-init-scripts/roles.sql
+      - 99-realtime.sql=volumes/db/custom-init-scripts/realtime.sql
+      - 99-logs.sql=volumes/db/custom-init-scripts/logs.sql
+      - 99-pooler.sql=volumes/db/custom-init-scripts/pooler.sql
   - name: postgres-migration-scripts
     files:
-      - 20250526235959_mon_leo_schema.sql=custom-migrations/20250526235959_mon_leo_schema.sql
+      - 20250526235959_mon_leo_schema.sql=volumes/db/custom-migrations/20250526235959_mon_leo_schema.sql
   - name: edge-functions-config
     files:
-      - edge-functions/functions.tar
+      - volumes/edge-functions/functions.tar
+  - name: pooler-config
+    files:
+      - volumes/pooler/pooler.exs
+  # - name: vector-config
+  #   files:
+  #     - volumes/vector/vector.yml
+  
 
 secretGenerator:
   - name: supabase-common-secrets
@@ -68,3 +76,6 @@ images:
   - name: supabase/edge-runtime
     newName: supabase/edge-runtime
     newTag: v1.67.4
+  - name: supabase/supavisor
+    newName: supabase/supavisor
+    newTag: 2.5.1
