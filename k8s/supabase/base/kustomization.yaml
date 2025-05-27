@@ -13,6 +13,7 @@ resources:
   - studio.yaml
   - analytics.yaml
   - imgproxy.yaml
+  - meta.yaml
 
 configMapGenerator:
   - name: supabase-common-config
@@ -57,3 +58,6 @@ images:
   - name: darthsim/imgproxy
     newName: darthsim/imgproxy
     newTag: v3.8.0
+  - name: supabase/postgres-meta
+    newName: supabase/postgres-meta
+    newTag: v0.89.0
