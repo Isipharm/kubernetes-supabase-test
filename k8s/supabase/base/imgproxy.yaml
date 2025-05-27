@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: imgproxy
+  labels:
+    app: imgproxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: imgproxy
+  template:
+    metadata:
+      labels:
+        app: imgproxy
+    spec:
+      containers:
+      - name: imgproxy
+        image: darthsim/imgproxy
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        env:
+        - name: IMGPROXY_BIND
+          value: ":5001"
+        - name: IMGPROXY_LOCAL_FILESYSTEM_ROOT
+          value: /
+        - name: IMGPROXY_USE_ETAG
+          value: "true"
+        - name: IMGPROXY_ENABLE_WEBP_DETECTION
+          value: $(IMGPROXY_ENABLE_WEBP_DETECTION)
+        envFrom:
+          - configMapRef:
+              name: supabase-common-config
+        volumeMounts:
+        - name: imgproxy-volume
+          mountPath: /var/lib/storage
+      volumes:
+      - name: imgproxy-volume
+        persistentVolumeClaim:
+          claimName: imgproxy-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: imgproxy-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

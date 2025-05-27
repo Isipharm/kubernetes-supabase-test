@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: studio
+  labels:
+    app: studio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: studio
+  template:
+    metadata:
+      labels:
+        app: studio
+    spec:
+    #TODO: manage initContainers to check analytics readiness
+      # initContainers:
+      # - name: check-db-ready
+      #   image: postgres:13-alpine
+      #   command: ['sh', '-c']
+      #   args:
+      #     - |
+      #       echo "Waiting for database to be ready..."
+      #       until pg_isready -h $(POSTGRES_HOST) -p $(POSTGRES_PORT) -U postgres; do
+      #       echo "Waiting for database to start..."
+      #         sleep 2
+      #         done
+      #     - echo "Database is ready"
+      #   env:
+      #   - name: PGPASSWORD
+      #     value: $(POSTGRES_PASSWORD)
+      #   envFrom:
+      #     - configMapRef:
+      #         name: supabase-common-config
+      #     - secretRef:
+      #         name: supabase-common-secrets
+      containers:
+      - name: studio
+        image: supabase/studio
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        env:
+        - name: STUDIO_PG_META_URL
+          value: http://meta:8080
+        - name: POSTGRES_PASSWORD
+          value: $(POSTGRES_PASSWORD)
+        - name: DEFAULT_ORGANIZATION_NAME
+          value: $(STUDIO_DEFAULT_ORGANIZATION)
+        - name: DEFAULT_PROJECT_NAME
+          value: $(STUDIO_DEFAULT_PROJECT)
+        - name: OPENAI_API_KEY
+          value: $(OPENAI_API_KEY:-)
+        - name: SUPABASE_URL
+          value: http://kong:8000
+        - name: SUPABASE_PUBLIC_URL
+          value: $(SUPABASE_PUBLIC_URL)
+        - name: SUPABASE_ANON_KEY
+          value: $(ANON_KEY)
+        - name: SUPABASE_SERVICE_KEY
+          value: $(SERVICE_ROLE_KEY)
+        - name: AUTH_JWT_SECRET
+          value: $(JWT_SECRET)
+        - name: LOGFLARE_API_KEY
+          value: $(LOGFLARE_API_KEY)
+        - name: LOGFLARE_URL
+          value: http://analytics:4000
+        - name: NEXT_PUBLIC_ENABLE_LOGS
+          value: "true"
+        - name: NEXT_ANALYTICS_BACKEND_PROVIDER
+          value: postgres
+        # Uncomment to use Big Query backend for analytics
+        # - name: NEXT_ANALYTICS_BACKEND_PROVIDER
+        #   value: bigquery
+        envFrom:
+          - configMapRef:
+              name: supabase-common-config
+          - secretRef:
+              name: supabase-common-secrets

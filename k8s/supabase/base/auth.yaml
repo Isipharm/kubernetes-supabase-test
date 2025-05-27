@@ -17,8 +17,15 @@ spec:
       initContainers:
       - name: check-db-ready
         image: postgres:13-alpine
-        command: ['sh', '-c', 
-          'until pg_isready -h $(POSTGRES_HOST) -p $(POSTGRES_PORT) -U postgres; do echo waiting for database; sleep 2; done;']
+        command: ['sh', '-c']
+        args:
+          - |
+            echo "Waiting for database to be ready..."
+            until pg_isready -h $(POSTGRES_HOST) -p $(POSTGRES_PORT) -U postgres; do
+            echo "Waiting for database to start..."
+              sleep 2
+              done
+          - echo "Database is ready"
         env:
         - name: PGPASSWORD
           value: $(POSTGRES_PASSWORD)
@@ -37,20 +44,20 @@ spec:
           limits:
             memory: "1Gi"
             cpu: "500m"
-        readinessProbe:
-          exec:
-            command: ["wget","--no-verbose","--tries=1","--spider","http://localhost:9999/health"]
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          timeoutSeconds: 5
-          failureThreshold: 3
-        livenessProbe:
-          exec:
-            command: ["wget","--no-verbose","--tries=1","--spider","http://localhost:9999/health"]
-          initialDelaySeconds: 30
-          periodSeconds: 5
-          timeoutSeconds: 5
-          failureThreshold: 3
+        # readinessProbe:
+        #   exec:
+        #     command: ["wget","--no-verbose","--tries=1","--spider","http://localhost:9999/health"]
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 5
+        #   timeoutSeconds: 5
+        #   failureThreshold: 3
+        # livenessProbe:
+        #   exec:
+        #     command: ["wget","--no-verbose","--tries=1","--spider","http://localhost:9999/health"]
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 5
+        #   timeoutSeconds: 5
+        #   failureThreshold: 3
         env:
         - name: GOTRUE_API_HOST
           value: 0.0.0.0

@@ -10,6 +10,9 @@ resources:
   - auth.yaml
   - rest.yaml
   - realtime.yaml
+  - studio.yaml
+  - analytics.yaml
+  - imgproxy.yaml
 
 configMapGenerator:
   - name: supabase-common-config
@@ -45,3 +48,12 @@ images:
   - name: supabase/realtime
     newName: supabase/realtime
     newTag: v2.34.47
+  - name: supabase/studio
+    newName: supabase/studio
+    newTag: 2025.05.19-sha-3487831
+  - name: supabase/logflare
+    newName: supabase/logflare
+    newTag: 1.12.0
+  - name: darthsim/imgproxy
+    newName: darthsim/imgproxy
+    newTag: v3.8.0
