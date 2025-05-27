@@ -17,11 +17,14 @@ spec:
       containers:
       - name: functions
         image: supabase/edge-runtime
+        command: ["/bin/sh", "-c"]
         args:
-        - tar -xf /home/deno/functions.tar -C /home/deno/functions
-        - start
-        - --main-service
-        - /home/deno/functions/main
+        - |
+          # Extraction des fichiers de fonctions
+          tar -xvf /home/deno/functions/tmp/functions.tar -C /home/deno/functions/
+          
+          # Démarrage du runtime
+          edge-runtime start --main-service /home/deno/functions/main
         resources:
           requests:
             memory: "256Mi"
@@ -50,7 +53,7 @@ spec:
               name: supabase-common-secrets
         volumeMounts:
         - name: functions-volume
-          mountPath: /home/deno/functions
+          mountPath: /home/deno/functions/tmp
       volumes:
       - name: functions-volume
         configMap:
