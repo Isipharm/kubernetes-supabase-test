@@ -14,6 +14,7 @@ resources:
   - analytics.yaml
   - imgproxy.yaml
   - meta.yaml
+  - functions.yaml
 
 configMapGenerator:
   - name: supabase-common-config
@@ -30,6 +31,9 @@ configMapGenerator:
   - name: postgres-migration-scripts
     files:
       - 20250526235959_mon_leo_schema.sql=custom-migrations/20250526235959_mon_leo_schema.sql
+  - name: edge-functions-config
+    files:
+      - edge-functions/functions.tar
 
 secretGenerator:
   - name: supabase-common-secrets
@@ -61,3 +65,6 @@ images:
   - name: supabase/postgres-meta
     newName: supabase/postgres-meta
     newTag: v0.89.0
+  - name: supabase/edge-runtime
+    newName: supabase/edge-runtime
+    newTag: v1.67.4

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: functions
+  labels:
+    app: functions
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: functions
+  template:
+    metadata:
+      labels:
+        app: functions
+    spec:
+      containers:
+      - name: functions
+        image: supabase/edge-runtime
+        args:
+        - tar -xf /home/deno/functions.tar -C /home/deno/functions
+        - start
+        - --main-service
+        - /home/deno/functions/main
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        env:
+        - name: JWT_SECRET
+          value: $(JWT_SECRET)
+        - name: SUPABASE_URL
+          value: http://kong:8000
+        - name: SUPABASE_ANON_KEY
+          value: $(ANON_KEY)
+        - name: SUPABASE_SERVICE_ROLE_KEY
+          value: $(SERVICE_ROLE_KEY)
+        - name: SUPABASE_DB_URL
+          value: postgresql://postgres:$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)
+        # TODO: Allow configuring VERIFY_JWT per function. This PR might help: https://github.com/supabase/cli/pull/786
+        - name: VERIFY_JWT
+          value: "$(FUNCTIONS_VERIFY_JWT)"
+        envFrom:
+          - configMapRef:
+              name: supabase-common-config
+          - secretRef:
+              name: supabase-common-secrets
+        volumeMounts:
+        - name: functions-volume
+          mountPath: /home/deno/functions
+      volumes:
+      - name: functions-volume
+        configMap:
+          name: edge-functions-config
