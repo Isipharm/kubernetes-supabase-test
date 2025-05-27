@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kong
+  labels:
+    app: kong
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kong
+  template:
+    metadata:
+      labels:
+        app: kong
+    spec:
+      initContainers:
+      - name: kong-migrations
+        image: bfogarty/envsubst:latest
+        command: ['/bin/sh', '-c']
+        args:
+          - |
+            echo "Running Kong migrations..."
+            envsubst < /home/kong/kong.yml > /home/kong/tmp/temp.yml
+        
+        envFrom:
+          - configMapRef:
+              name: supabase-common-config
+          - secretRef:
+              name: supabase-common-secrets
+        volumeMounts:
+          - name: kong-volume
+            mountPath: /home/kong/kong.yml
+            subPath: kong.yml
+          - name: kong-template
+            mountPath: /home/kong/tmp
+      containers:
+      - name: kong
+        image: kong
+        ports:
+        - containerPort: 8000
+        - containerPort: 8443
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        env:
+        - name: KONG_DATABASE
+          value: "off"
+        - name: KONG_DECLARATIVE_CONFIG
+          value: /home/kong/temp.yml
+        # https://github.com/supabase/cli/issues/14
+        - name: KONG_DNS_ORDER
+          value: LAST,A,CNAME
+        - name: KONG_PLUGINS
+          value: request-transformer,cors,key-auth,acl,basic-auth
+        - name: KONG_NGINX_PROXY_PROXY_BUFFER_SIZE
+          value: 160k
+        - name: KONG_NGINX_PROXY_PROXY_BUFFERS
+          value: 64 160k
+        - name: SUPABASE_ANON_KEY
+          value: $(ANON_KEY)
+        - name: SUPABASE_SERVICE_KEY
+          value: $(SERVICE_ROLE_KEY)
+        - name: DASHBOARD_USERNAME
+          value: $(DASHBOARD_USERNAME)
+        - name: DASHBOARD_PASSWORD
+          value: $(DASHBOARD_PASSWORD)
+        envFrom:
+          - configMapRef:
+              name: supabase-common-config
+          - secretRef:
+              name: supabase-common-secrets
+        volumeMounts:
+        - name: kong-template
+          mountPath: /home/kong/temp.yml
+          subPath: temp.yml
+      volumes:
+      - name: kong-template
+        emptyDir: {}
+      - name: kong-volume
+        configMap:
+          name: kong-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kong
+spec:
+  selector:
+    app: kong
+  ports:
+  - name: kong-http
+    port: 8000
+    targetPort: 8000
+  - name: kong-https
+    port: 8443
+    targetPort: 8443
+  type: ClusterIP

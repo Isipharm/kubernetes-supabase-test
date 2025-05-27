@@ -42,3 +42,14 @@ spec:
               name: supabase-common-config
           - secretRef:
               name: supabase-common-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: meta
+spec:
+  selector:
+    app: meta
+  ports:
+    - port: 8080
+      targetPort: 8080

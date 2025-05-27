@@ -58,3 +58,14 @@ spec:
       - name: functions-volume
         configMap:
           name: edge-functions-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: functions
+spec:
+  selector:
+    app: functions
+  ports:
+    - port: 9000
+      targetPort: 9000

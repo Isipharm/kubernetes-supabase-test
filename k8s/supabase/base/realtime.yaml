@@ -96,3 +96,14 @@ spec:
               name: supabase-common-config
           - secretRef:
               name: supabase-common-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: realtime
+spec:
+  selector:
+    app: realtime
+  ports:
+    - port: 4000
+      targetPort: 4000

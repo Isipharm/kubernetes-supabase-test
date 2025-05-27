@@ -47,7 +47,7 @@ spec:
             cpu: "500m"
         env:
         - name: STUDIO_PG_META_URL
-          value: http://meta:8080
+          value: http://supabase-meta:8080
         - name: POSTGRES_PASSWORD
           value: $(POSTGRES_PASSWORD)
         - name: DEFAULT_ORGANIZATION_NAME
@@ -57,7 +57,7 @@ spec:
         - name: OPENAI_API_KEY
           value: $(OPENAI_API_KEY:-)
         - name: SUPABASE_URL
-          value: http://kong:8000
+          value: http://supabase-kong:8000
         - name: SUPABASE_PUBLIC_URL
           value: $(SUPABASE_PUBLIC_URL)
         - name: SUPABASE_ANON_KEY
@@ -69,7 +69,7 @@ spec:
         - name: LOGFLARE_API_KEY
           value: $(LOGFLARE_API_KEY)
         - name: LOGFLARE_URL
-          value: http://analytics:4000
+          value: http://supabase-analytics:4000
         - name: NEXT_PUBLIC_ENABLE_LOGS
           value: "true"
         - name: NEXT_ANALYTICS_BACKEND_PROVIDER
@@ -82,3 +82,14 @@ spec:
               name: supabase-common-config
           - secretRef:
               name: supabase-common-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: studio
+spec:
+  selector:
+    app: studio
+  ports:
+    - port: 3000
+      targetPort: 3000

@@ -37,6 +37,8 @@ spec:
       containers:
       - name: auth
         image: supabase/gotrue
+        ports:
+        - containerPort: 9999
         resources:
           requests:
             memory: "256Mi"
@@ -126,3 +128,14 @@ spec:
               name: supabase-common-config
           - secretRef:
               name: supabase-common-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth
+spec:
+  selector:
+    app: auth
+  ports:
+    - port: 9999
+      targetPort: 9999

@@ -16,6 +16,7 @@ resources:
   - meta.yaml
   - functions.yaml
   #- pooler.yaml  Pooler not working yet
+  - kong.yaml
 
 configMapGenerator:
   - name: supabase-common-config
@@ -38,6 +39,9 @@ configMapGenerator:
   - name: pooler-config
     files:
       - volumes/pooler/pooler.exs
+  - name: kong-config
+    files:
+      - volumes/api/kong.yml
   # - name: vector-config
   #   files:
   #     - volumes/vector/vector.yml
@@ -79,3 +83,6 @@ images:
   - name: supabase/supavisor
     newName: supabase/supavisor
     newTag: 2.5.1
+  - name: kong
+    newName: kong
+    newTag: 2.8.1

@@ -64,3 +64,14 @@ spec:
               name: supabase-common-config
           - secretRef:
               name: supabase-common-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rest
+spec:
+  selector:
+    app: rest
+  ports:
+    - port: 3000
+      targetPort: 3000
