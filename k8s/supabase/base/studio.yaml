@@ -49,8 +49,6 @@ spec:
             memory: "2Gi"
             cpu: "500m"
         env:
-        - name: HOSTNAME
-          value: "0.0.0.0"
         - name: STUDIO_PG_META_URL
           value: http://supabase-meta:8080
         - name: POSTGRES_PASSWORD
