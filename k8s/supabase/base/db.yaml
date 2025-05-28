@@ -32,7 +32,7 @@ spec:
             cp /custom-init-scripts/99-realtime.sql /initdb.d/migrations/
 
             #echo "Copying user-defined migration scripts..."
-            #cp /custom-migrations/* /initdb.d/migrations/ || echo "Skip migrations"
+            cp /custom-migrations/* /initdb.d/migrations/ || echo "Skip migrations"
             echo "Initialization scripts are ready"
         volumeMounts:
             - mountPath: /custom-init-scripts

@@ -33,7 +33,7 @@ configMapGenerator:
       - 99-pooler.sql=volumes/db/custom-init-scripts/pooler.sql
   - name: postgres-migration-scripts
     files:
-      - 20250526235959_mon_leo_schema.sql=volumes/db/custom-migrations/20250526235959_mon_leo_schema.sql
+      - volumes/db/custom-migrations/20250528154547_init_mon_leo.sql
   - name: edge-functions-config
     files:
       - volumes/edge-functions/functions.tar
