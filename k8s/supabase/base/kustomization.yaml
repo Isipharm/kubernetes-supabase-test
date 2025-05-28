@@ -17,9 +17,10 @@ resources:
   - functions.yaml
   #- pooler.yaml  Pooler not working yet
   - kong.yaml
+  - storage.yaml
 
 configMapGenerator:
-  - name: supabase-common-config
+  - name: common-config
     env: .env
   - name: postgres-init-scripts
     files:
@@ -41,14 +42,16 @@ configMapGenerator:
       - volumes/pooler/pooler.exs
   - name: kong-config
     files:
-      - volumes/api/kong.yml
+      - volumes/api/wrapper.sh
+      - volumes/api/template.yml
+      
   # - name: vector-config
   #   files:
   #     - volumes/vector/vector.yml
   
 
 secretGenerator:
-  - name: supabase-common-secrets
+  - name: common-secrets
     env: .env.secrets
 
 # Configuration des images utilisées

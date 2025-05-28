@@ -32,20 +32,25 @@ spec:
       #     value: $(POSTGRES_PASSWORD)
       #   envFrom:
       #     - configMapRef:
-      #         name: supabase-common-config
+      #         name: common-config
       #     - secretRef:
-      #         name: supabase-common-secrets
+      #         name: common-secrets
       containers:
       - name: studio
         image: supabase/studio
+        ports:
+        - containerPort: 3000
+          name: studio
         resources:
           requests:
             memory: "256Mi"
             cpu: "100m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "500m"
         env:
+        - name: HOSTNAME
+          value: "0.0.0.0"
         - name: STUDIO_PG_META_URL
           value: http://supabase-meta:8080
         - name: POSTGRES_PASSWORD
@@ -79,9 +84,9 @@ spec:
         #   value: bigquery
         envFrom:
           - configMapRef:
-              name: supabase-common-config
+              name: common-config
           - secretRef:
-              name: supabase-common-secrets
+              name: common-secrets
 ---
 apiVersion: v1
 kind: Service

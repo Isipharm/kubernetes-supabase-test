@@ -30,13 +30,13 @@ spec:
             memory: "256Mi"
             cpu: "100m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "500m"
         env:
         - name: JWT_SECRET
           value: $(JWT_SECRET)
         - name: SUPABASE_URL
-          value: http://kong:8000
+          value: http://supabase-kong:8000
         - name: SUPABASE_ANON_KEY
           value: $(ANON_KEY)
         - name: SUPABASE_SERVICE_ROLE_KEY
@@ -48,9 +48,9 @@ spec:
           value: "$(FUNCTIONS_VERIFY_JWT)"
         envFrom:
           - configMapRef:
-              name: supabase-common-config
+              name: common-config
           - secretRef:
-              name: supabase-common-secrets
+              name: common-secrets
         volumeMounts:
         - name: functions-volume
           mountPath: /home/deno/functions/tmp

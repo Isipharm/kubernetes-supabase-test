@@ -34,9 +34,9 @@ spec:
           # supabase-db only for the pooler pod, other pods should use the pooler service host
         envFrom:
           - configMapRef:
-              name: supabase-common-config
+              name: common-config
           - secretRef:
-              name: supabase-common-secrets
+              name: common-secrets
       containers:
       - name: pooler
         image: supabase/supavisor
@@ -51,7 +51,7 @@ spec:
             memory: "256Mi"
             cpu: "100m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "500m"
         env:
         - name: PORT
@@ -88,9 +88,9 @@ spec:
           value: transaction
         envFrom:
           - configMapRef:
-              name: supabase-common-config
+              name: common-config
           - secretRef:
-              name: supabase-common-secrets
+              name: common-secrets
         volumeMounts:
         - name: pooler-volume
           mountPath: /etc/pooler/pooler.exs

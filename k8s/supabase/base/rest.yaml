@@ -31,9 +31,9 @@ spec:
           value: $(POSTGRES_PASSWORD)
         envFrom:
           - configMapRef:
-              name: supabase-common-config
+              name: common-config
           - secretRef:
-              name: supabase-common-secrets
+              name: common-secrets
       containers:
       - name: rest
         image: postgrest/postgrest
@@ -42,7 +42,7 @@ spec:
             memory: "256Mi"
             cpu: "100m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "500m"
         env:
         - name: PGRST_DB_URI
@@ -61,9 +61,9 @@ spec:
           value: $(JWT_EXPIRY)
         envFrom:
           - configMapRef:
-              name: supabase-common-config
+              name: common-config
           - secretRef:
-              name: supabase-common-secrets
+              name: common-secrets
 ---
 apiVersion: v1
 kind: Service

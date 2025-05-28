@@ -31,9 +31,9 @@ spec:
           value: $(POSTGRES_PASSWORD)
         envFrom:
           - configMapRef:
-              name: supabase-common-config
+              name: common-config
           - secretRef:
-              name: supabase-common-secrets
+              name: common-secrets
       containers:
       - name: auth
         image: supabase/gotrue
@@ -44,22 +44,8 @@ spec:
             memory: "256Mi"
             cpu: "100m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "500m"
-        # readinessProbe:
-        #   exec:
-        #     command: ["wget","--no-verbose","--tries=1","--spider","http://localhost:9999/health"]
-        #   initialDelaySeconds: 5
-        #   periodSeconds: 5
-        #   timeoutSeconds: 5
-        #   failureThreshold: 3
-        # livenessProbe:
-        #   exec:
-        #     command: ["wget","--no-verbose","--tries=1","--spider","http://localhost:9999/health"]
-        #   initialDelaySeconds: 30
-        #   periodSeconds: 5
-        #   timeoutSeconds: 5
-        #   failureThreshold: 3
         env:
         - name: GOTRUE_API_HOST
           value: 0.0.0.0
@@ -125,9 +111,9 @@ spec:
           value: $(ENABLE_PHONE_AUTOCONFIRM)
         envFrom:
           - configMapRef:
-              name: supabase-common-config
+              name: common-config
           - secretRef:
-              name: supabase-common-secrets
+              name: common-secrets
 ---
 apiVersion: v1
 kind: Service

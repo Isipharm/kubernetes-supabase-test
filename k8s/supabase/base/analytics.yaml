@@ -31,9 +31,9 @@ spec:
           value: $(POSTGRES_PASSWORD)
         envFrom:
           - configMapRef:
-              name: supabase-common-config
+              name: common-config
           - secretRef:
-              name: supabase-common-secrets
+              name: common-secrets
       containers:
       - name: analytics
         image: supabase/logflare
@@ -45,7 +45,7 @@ spec:
             memory: "256Mi"
             cpu: "100m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "500m"
         env:
         - name:  LOGFLARE_NODE_HOST
@@ -85,9 +85,9 @@ spec:
         #   value: ${GOOGLE_PROJECT_NUMBER}
         envFrom:
           - configMapRef:
-              name: supabase-common-config
+              name: common-config
           - secretRef:
-              name: supabase-common-secrets
+              name: common-secrets
 ---
 apiVersion: v1
 kind: Service

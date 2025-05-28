@@ -52,7 +52,7 @@ spec:
             memory: "256Mi"
             cpu: "100m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "500m"
         # readinessProbe:
         #   exec:
@@ -87,9 +87,9 @@ spec:
           value: $(JWT_EXPIRY)
         envFrom:
           - configMapRef:
-              name: supabase-common-config
+              name: common-config
           - secretRef:
-              name: supabase-common-secrets
+              name: common-secrets
         volumeMounts:
         - name: postgres-data
           mountPath: /var/lib/postgresql/data
