@@ -8,4 +8,4 @@ if (Test-Path $targetPath) {
 tar -cvf functions.tar -C ../k8s/supabase/base/edge-functions .
 
 # Déplacement du nouveau fichier
-mv functions.tar $targetPath
+Move-Item functions.tar $targetPath

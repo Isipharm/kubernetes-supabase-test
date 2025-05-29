@@ -8,21 +8,23 @@
 
 params = %{
   "external_id" => System.get_env("POOLER_TENANT_ID"),
-  "db_host" => "db",
-  "db_port" => System.get_env("POSTGRES_PORT"),
+  "db_host" => System.get_env("POSTGRES_HOST"),   # <-- injecté par env K8s
+  "db_port" => System.get_env("POSTGRES_PORT"),   # <-- injecté par env K8s
   "db_database" => System.get_env("POSTGRES_DB"),
   "require_user" => false,
   "auth_query" => "SELECT * FROM pgbouncer.get_auth($1)",
   "default_max_clients" => System.get_env("POOLER_MAX_CLIENT_CONN"),
   "default_pool_size" => System.get_env("POOLER_DEFAULT_POOL_SIZE"),
   "default_parameter_status" => %{"server_version" => version},
-  "users" => [%{
-    "db_user" => "pgbouncer",
-    "db_password" => System.get_env("POSTGRES_PASSWORD"),
-    "mode_type" => System.get_env("POOLER_POOL_MODE"),
-    "pool_size" => System.get_env("POOLER_DEFAULT_POOL_SIZE"),
-    "is_manager" => true
-  }]
+  "users" => [
+    %{
+      "db_user" => System.get_env("POOLER_DB_USER") || "pgbouncer",
+      "db_password" => System.get_env("POOLER_DB_PASSWORD") || System.get_env("POSTGRES_PASSWORD"),
+      "mode_type" => System.get_env("POOLER_POOL_MODE"),
+      "pool_size" => System.get_env("POOLER_DEFAULT_POOL_SIZE"),
+      "is_manager" => true
+    }
+  ]
 }
 
 if !Supavisor.Tenants.get_tenant_by_external_id(params["external_id"]) do

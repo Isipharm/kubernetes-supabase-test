@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pooler
+  name: supavisor
   labels:
-    app: pooler
+    app: supavisor
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: pooler
+      app: supavisor
   template:
     metadata:
       labels:
-        app: pooler
+        app: supavisor
     spec:
       initContainers:
       - name: check-db-ready
@@ -38,7 +38,7 @@ spec:
           - secretRef:
               name: common-secrets
       containers:
-      - name: pooler
+      - name: supavisor
         image: supabase/supavisor
         ports:
         - containerPort: 5432
@@ -56,14 +56,20 @@ spec:
         env:
         - name: PORT
           value: "4000"
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
         - name: POSTGRES_PORT
           value: $(POSTGRES_PORT)
         - name: POSTGRES_DB
           value: $(POSTGRES_DB)
+        - name: POSTGRES_HOST
+          value: supabase-db
         - name: POSTGRES_PASSWORD
           value: $(POSTGRES_PASSWORD)
         - name: DATABASE_URL
-          value: ecto://supabase_admin:$(POSTGRES_PASSWORD)@supabase-db:$(POSTGRES_PORT)/_supabase
+          value: ecto://supabase_admin:$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/_supabase
         - name: CLUSTER_POSTGRES
           value: "true"
         - name: SECRET_KEY_BASE
@@ -77,7 +83,7 @@ spec:
         - name: REGION
           value: local
         - name: ERL_AFLAGS
-          value: -proto_dist inet_tcp
+          value: -proto_dist inet_tcp        
         - name: POOLER_TENANT_ID
           value: $(POOLER_TENANT_ID)
         - name: POOLER_DEFAULT_POOL_SIZE
@@ -86,33 +92,41 @@ spec:
           value: $(POOLER_MAX_CLIENT_CONN)
         - name: POOLER_POOL_MODE
           value: transaction
+        - name: DB_POOL_SIZE
+          value: $(DB_POOL_SIZE)
+        - name: RELEASE_COOKIE
+          valueFrom:
+            secretKeyRef:
+              name: pooler-release-cookie
+              key: ERLANG_COOKIE
         envFrom:
           - configMapRef:
               name: common-config
           - secretRef:
               name: common-secrets
         volumeMounts:
-        - name: pooler-volume
+        - name: pooler
           mountPath: /etc/pooler/pooler.exs
           subPath: pooler.exs
-          readOnly: true
       volumes:
-      - name: pooler-volume
+      - name: pooler
         configMap:
           name: pooler-config
+          items:
+          - key: pooler.exs
+            path: pooler.exs
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: pooler
+  name: supavisor
 spec:
   selector:
-    app: pooler
+    app: supavisor
   ports:
   - port: 5432
-    name: postgres
+    name: session
     targetPort: 5432
   - port: 6543
-    name: pooler
+    name: transaction
     targetPort: 6543
-  type: ClusterIP

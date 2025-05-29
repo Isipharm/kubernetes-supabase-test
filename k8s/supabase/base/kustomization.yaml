@@ -15,7 +15,7 @@ resources:
   - imgproxy.yaml
   - meta.yaml
   - functions.yaml
-  #- pooler.yaml  Pooler not working yet
+  - pooler.yaml
   - kong.yaml
   - storage.yaml
 
@@ -40,6 +40,7 @@ configMapGenerator:
   - name: pooler-config
     files:
       - volumes/pooler/pooler.exs
+      - volumes/pooler/runtime.exs
   - name: kong-config
     files:
       - volumes/api/wrapper.sh
@@ -53,6 +54,8 @@ configMapGenerator:
 secretGenerator:
   - name: common-secrets
     env: .env.secrets
+  - name: pooler-release-cookie
+    env: .env.erlang-cookie
 
 # Configuration des images utilisées
 images:
