@@ -54,7 +54,7 @@ spec:
             cpu: "100m"
           limits:
             memory: "2Gi"
-            cpu: "1Gi"
+            cpu: "1"
         # readinessProbe:
         #   exec:
         #     command: ["pg_isready", "-U", "postgres", "-h", "localhost"]
