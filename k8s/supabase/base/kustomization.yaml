@@ -54,8 +54,6 @@ configMapGenerator:
 secretGenerator:
   - name: common-secrets
     env: .env.secrets
-  - name: pooler-release-cookie
-    env: .env.erlang-cookie
 
 # Configuration des images utilisées
 images:
