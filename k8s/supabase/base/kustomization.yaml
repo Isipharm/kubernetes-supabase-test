@@ -20,8 +20,8 @@ resources:
   - storage.yaml
 
 configMapGenerator:
-  - name: common-config
-    env: .env
+  # - name: common-config
+  #   env: .env
   - name: postgres-init-scripts
     files:
       - 97-_supabase.sql=volumes/db/custom-init-scripts/_supabase.sql
@@ -51,9 +51,9 @@ configMapGenerator:
   #     - volumes/vector/vector.yml
   
 
-secretGenerator:
-  - name: common-secrets
-    env: .env.secrets
+# secretGenerator:
+#   - name: common-secrets
+#     env: .env.secrets
 
 # Configuration des images utilisées
 images:
