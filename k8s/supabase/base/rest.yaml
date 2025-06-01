@@ -75,3 +75,20 @@ spec:
   ports:
     - port: 3000
       targetPort: 3000
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: rest-v1
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/rest/v1/`)
+      kind: Rule
+      services:
+        - name: supabase-rest
+          port: 3000
+      middlewares:
+        - name: cors
+        - name: key-auth

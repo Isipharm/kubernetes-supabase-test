@@ -125,3 +125,19 @@ spec:
   ports:
     - port: 9999
       targetPort: 9999
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: auth-v1-verify
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Path(`/auth/v1/verify`)
+      kind: Rule
+      services:
+        - name: supabase-auth
+          port: 9999
+      middlewares:
+        - name: cors

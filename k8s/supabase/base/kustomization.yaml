@@ -15,9 +15,10 @@ resources:
   - imgproxy.yaml
   - meta.yaml
   - functions.yaml
-  - pooler.yaml
-  - kong.yaml
+  - supavisor.yaml
+  #- kong.yaml
   - storage.yaml
+  - traefik.yaml
 
 configMapGenerator:
   # - name: common-config
@@ -90,3 +91,6 @@ images:
   - name: kong
     newName: kong
     newTag: 2.8.1
+  - name: traefik
+    newName: traefik
+    newTag: v3.4
