@@ -129,7 +129,7 @@ spec:
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: auth-v1-verify
+  name: auth-v1
 spec:
   entryPoints:
     - web
@@ -141,3 +141,28 @@ spec:
           port: 9999
       middlewares:
         - name: supabase-cors
+        - name: supabase-auth-stripprefix
+    - match: Path(`/auth/v1/callback`)
+      kind: Rule
+      services:
+        - name: supabase-auth
+          port: 9999
+      middlewares:
+        - name: supabase-cors
+        - name: supabase-auth-stripprefix
+    - match: Path(`/auth/v1/authorize`)
+      kind: Rule
+      services:
+        - name: supabase-auth
+          port: 9999
+      middlewares:
+        - name: supabase-cors
+        - name: supabase-auth-stripprefix
+    - match: Path(`/auth/v1`)
+      kind: Rule
+      services:
+        - name: supabase-auth
+          port: 9999
+      middlewares:
+        - name: supabase-cors
+        - name: supabase-auth-stripprefix

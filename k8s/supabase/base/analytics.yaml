@@ -99,3 +99,20 @@ spec:
       targetPort: 4000
   selector:
     app: analytics
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: analytics-v1
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/analytics/v1`)
+      kind: Rule
+      services:
+        - name: supabase-analytics
+          port: 4000
+      middlewares:
+      - name: supabase-cors
+      - name: supabase-analytics-stripprefix

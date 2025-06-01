@@ -84,11 +84,22 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: PathPrefix(`/rest/v1/`)
+    - match: PathPrefix(`/rest/v1`)
       kind: Rule
       services:
         - name: supabase-rest
           port: 3000
       middlewares:
         - name: supabase-cors
+        - name: supabase-rest-stripprefix
+        #- name: key-auth
+    - match: PathPrefix(`/graphql/v1`)
+      kind: Rule
+      services:
+        - name: supabase-rest
+          port: 3000
+      middlewares:
+        - name: supabase-cors
+        - name: supabase-graphql-replacepath
+        - name: supabase-graph-add-content-profile
         #- name: key-auth

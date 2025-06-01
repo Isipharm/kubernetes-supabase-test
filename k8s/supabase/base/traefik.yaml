@@ -76,6 +76,87 @@ spec:
   basicAuth:
     secret: basicauth-secrets
 ---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: auth-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /auth/v1
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: rest-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /rest/v1
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: graphql-replacepath
+spec:
+  replacePathRegex:
+    regex: ^/graphql/v1/?(.*)
+    replacement: /rpc/graphql/$1
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: graph-add-content-profile
+spec:
+  headers:
+    customRequestHeaders:
+      Content-Profile: graphql_public
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: realtime-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /realtime/v1
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: storage-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /storage/v1
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: functions-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /functions/v1
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: analytics-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /analytics/v1
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: meta-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /pg
+---
 # apiVersion: traefik.io/v1alpha1
 # kind: Middleware
 # metadata:
