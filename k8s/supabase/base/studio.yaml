@@ -101,6 +101,7 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: studio
+  namespace: supabase
 spec:
   entryPoints:
     - web
@@ -109,7 +110,6 @@ spec:
       kind: Rule
       services:
         - name: supabase-studio
-          namespace: supabase
           port: 3000
       middlewares:
         #- name: dashboard-basicauth

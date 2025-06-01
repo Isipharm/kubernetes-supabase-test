@@ -80,6 +80,7 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: rest-v1
+  namespace: supabase
 spec:
   entryPoints:
     - web
