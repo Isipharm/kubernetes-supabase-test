@@ -17,13 +17,13 @@ spec:
       containers:
       - name: imgproxy
         image: darthsim/imgproxy
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
-            memory: "2Gi"
-            cpu: "500m"
+        # resources:
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "100m"
+        #   limits:
+        #     memory: "2Gi"
+        #     cpu: "500m"
         env:
         - name: IMGPROXY_BIND
           value: ":5001"

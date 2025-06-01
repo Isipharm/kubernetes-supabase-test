@@ -37,13 +37,13 @@ spec:
       containers:
       - name: rest
         image: postgrest/postgrest
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
-            memory: "2Gi"
-            cpu: "500m"
+        # resources:
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "100m"
+        #   limits:
+        #     memory: "2Gi"
+        #     cpu: "500m"
         env:
         - name: PGRST_DB_URI
           value: postgres://authenticator:$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)

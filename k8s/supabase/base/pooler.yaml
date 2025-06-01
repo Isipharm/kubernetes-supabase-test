@@ -46,13 +46,13 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
         - /app/bin/migrate && /app/bin/supavisor eval "$$(cat /etc/pooler/pooler.exs)" && /app/bin/server
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
-            memory: "2Gi"
-            cpu: "500m"
+        # resources:
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "100m"
+        #   limits:
+        #     memory: "2Gi"
+        #     cpu: "500m"
         env:
         - name: PORT
           value: "4000"

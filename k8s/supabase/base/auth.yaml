@@ -39,13 +39,13 @@ spec:
         image: supabase/gotrue
         ports:
         - containerPort: 9999
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
-            memory: "2Gi"
-            cpu: "500m"
+        # resources:
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "100m"
+        #   limits:
+        #     memory: "2Gi"
+        #     cpu: "500m"
         env:
         - name: GOTRUE_API_HOST
           value: 0.0.0.0

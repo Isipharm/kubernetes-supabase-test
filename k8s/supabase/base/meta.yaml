@@ -17,13 +17,13 @@ spec:
       containers:
       - name: meta
         image: supabase/postgres-meta
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
-            memory: "2Gi"
-            cpu: "500m"
+        # resources:
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "100m"
+        #   limits:
+        #     memory: "2Gi"
+        #     cpu: "500m"
         env:
         - name: PG_META_PORT
           value: "8080"

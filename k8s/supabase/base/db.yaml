@@ -48,13 +48,13 @@ spec:
         # command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf", "-c", "log_min_messages=fatal"]
         ports:
         - containerPort: 5432
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
-            memory: "2Gi"
-            cpu: "1"
+        # resources:
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "100m"
+        #   limits:
+        #     memory: "2Gi"
+        #     cpu: "500m"
         # readinessProbe:
         #   exec:
         #     command: ["pg_isready", "-U", "postgres", "-h", "localhost"]
