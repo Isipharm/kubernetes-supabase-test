@@ -90,5 +90,5 @@ spec:
         - name: supabase-rest
           port: 3000
       middlewares:
-        - name: cors
+        - name: supabase-cors
         #- name: key-auth

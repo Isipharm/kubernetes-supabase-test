@@ -140,4 +140,4 @@ spec:
         - name: supabase-auth
           port: 9999
       middlewares:
-        - name: cors
+        - name: supabase-cors
