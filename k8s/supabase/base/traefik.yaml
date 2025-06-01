@@ -23,6 +23,8 @@ spec:
             - --providers.kubernetesingress
             - --providers.kubernetescrd
             - --log.level=INFO
+            - --entryPoints.web.address=:80
+            - --entryPoints.websecure.address=:443
           ports:
             - name: web
               containerPort: 80
@@ -43,6 +45,9 @@ spec:
     - port: 80
       name: web
       targetPort: web
+    - port: 443
+      name: websecure
+      targetPort: websecure
     - port: 8080
       name: dashboard
       targetPort: dashboard
