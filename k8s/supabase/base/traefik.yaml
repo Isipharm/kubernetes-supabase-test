@@ -14,13 +14,13 @@ spec:
       labels:
         app: traefik
     spec:
+      serviceAccountName: traefik-account
       containers:
         - name: traefik
           image: traefik
           args:
-            - --api.insecure=true
-            - --providers.kubernetescrd
-            - --entrypoints.web.address=:80
+            - --api.insecure
+            - --providers.kubernetesingress
           ports:
             - name: web
               containerPort: 80
@@ -38,11 +38,11 @@ spec:
   selector:
     app: traefik
   ports:
-    - name: web
-      port: 80
+    - port: 80
+      name: web
       targetPort: web
-    - name: dashboard
-      port: 8080
+    - port: 8080
+      name: dashboard
       targetPort: dashboard
 ---
 apiVersion: traefik.io/v1alpha1
@@ -69,12 +69,89 @@ spec:
   basicAuth:
     secret: basicauth-secrets
 ---
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
+# apiVersion: traefik.io/v1alpha1
+# kind: Middleware
+# metadata:
+#   name: key-auth
+# spec:
+#   plugin:
+#     header-auth:
+#       headerName: "apikey"
+#       headerValue: "$(ANON_KEY)"
+# ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
 metadata:
-  name: key-auth
-spec:
-  plugin:
-    header-auth:
-      headerName: "apikey"
-      headerValue: "$(ANON_KEY)"
+  name: traefik-role
+  namespace: supabase
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - services
+      - secrets
+      - nodes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+      - networking.k8s.io
+    resources:
+      - ingresses
+      - ingressclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+      - networking.k8s.io
+    resources:
+      - ingresses/status
+    verbs:
+      - update
+  - apiGroups:
+      - traefik.io
+    resources:
+      - middlewares
+      - middlewaretcps
+      - ingressroutes
+      - traefikservices
+      - ingressroutetcps
+      - ingressrouteudps
+      - tlsoptions
+      - tlsstores
+      - serverstransports
+      - serverstransporttcps
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: traefik-account
+  namespace: supabase
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: traefik-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: traefik-role
+subjects:
+  - kind: ServiceAccount
+    name: traefik-account
+    namespace: supabase

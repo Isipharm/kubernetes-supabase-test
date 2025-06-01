@@ -91,4 +91,4 @@ spec:
           port: 3000
       middlewares:
         - name: cors
-        - name: key-auth
+        #- name: key-auth
