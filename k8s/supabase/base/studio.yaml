@@ -109,6 +109,7 @@ spec:
       kind: Rule
       services:
         - name: supabase-studio
+          namespace: supabase
           port: 3000
       middlewares:
         #- name: dashboard-basicauth
