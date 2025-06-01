@@ -111,4 +111,4 @@ spec:
         - name: supabase-studio
           port: 3000
       middlewares:
-        - name: dashboard-basicauth
+        #- name: dashboard-basicauth
