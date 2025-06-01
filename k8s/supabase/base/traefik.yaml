@@ -34,7 +34,7 @@ metadata:
   labels:
     app: traefik
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: traefik
   ports:
