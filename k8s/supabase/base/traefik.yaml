@@ -67,8 +67,7 @@ metadata:
   name: dashboard-basicauth
 spec:
   basicAuth:
-    users:
-      - "admin:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/" # admin:password (htpasswd)
+    secret: basicauth-secrets
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware

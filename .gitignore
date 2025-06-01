@@ -60,3 +60,4 @@ scripts/**/*.cache
 # Python __pycache__ (si tu fais des scripts en Python)
 __pycache__/
 *.pyc
+k8s/supabase/base/users.txt

@@ -1,5 +1,6 @@
 kubectl create namespace supabase
 kubectl create secret generic common-secrets --from-env-file=../k8s/supabase/base/.env.secrets --namespace supabase
+kubectl create secret generic basicauth-secrets --from-file=users=../k8s/supabase/base/users.txt --namespace supabase
 kubectl create configmap common-config --from-env-file=../k8s/supabase/base/.env --namespace supabase
 
 #deploy traefik crds
