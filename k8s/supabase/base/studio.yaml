@@ -101,7 +101,6 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: studio
-  namespace: supabase
 spec:
   entryPoints:
     - web
