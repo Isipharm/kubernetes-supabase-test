@@ -21,7 +21,7 @@ Deno.serve(async (req) => {
 
         console.log("Attempting signInWithPassword with:", {
           email: `${request.idExterne}@leo-officine.fr`,
-          // Password redacted for security
+          password: _uuidToPassword(request.idExterne),
           method: "POST",
           url: `${Deno.env.get("SUPABASE_URL")}/auth/v1/token?grant_type=password`,
           headers: {
