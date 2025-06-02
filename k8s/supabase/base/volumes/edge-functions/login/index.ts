@@ -15,31 +15,15 @@ interface AuthRequest {
 
 // Méthode principale, celle qui sera exécutée lors de l'appel de la fonction
 Deno.serve(async (req) => {
-    console.log("Received request:", req.method, req.url);
     try {
         const request: AuthRequest = await req.json();
 
-        console.log("Attempting signInWithPassword with:", {
-          email: `${request.idExterne}@leo-officine.fr`,
-          password: _uuidToPassword(request.idExterne),
-          method: "POST",
-          url: `${Deno.env.get("SUPABASE_URL")}/auth/v1/token?grant_type=password`,
-          headers: {
-            "Content-Type": "application/json",
-            "ApiKey": Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
-          }
-        });
-        
         const { error } = await supabase.auth
             .signInWithPassword({
-            email: `${request.idExterne}@leo-officine.fr`,
-            password: _uuidToPassword(request.idExterne),
+                email: `${request.idExterne}@leo-officine.fr`,
+                password: _uuidToPassword(request.idExterne),
             });
-        
-        console.log("signInWithPassword response received");
-        console.log("Sign in error:", error);
         if (error && error.status == 400) {
-            console.log("User not found, creating new user:", request.idExterne);
             const { data: dataSignup } = await supabase.auth
                 .signUp(
                     {
