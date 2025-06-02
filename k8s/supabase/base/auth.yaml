@@ -158,7 +158,7 @@ spec:
     #   middlewares:
     #     - name: supabase-cors
     #     - name: supabase-auth-stripprefix
-    - match: Path(`/auth/v1/*`)
+    - match: Path(`/auth/v1`)
       kind: Rule
       services:
         - name: supabase-auth
