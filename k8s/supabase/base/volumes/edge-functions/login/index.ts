@@ -24,6 +24,7 @@ Deno.serve(async (req) => {
                 email: `${request.idExterne}@leo-officine.fr`,
                 password: _uuidToPassword(request.idExterne),
             });
+        console.log("Sign in error:", error);
         if (error && error.status == 400) {
             console.log("User not found, creating new user:", request.idExterne);
             const { data: dataSignup } = await supabase.auth
