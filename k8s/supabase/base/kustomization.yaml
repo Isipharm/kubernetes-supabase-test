@@ -43,10 +43,6 @@ configMapGenerator:
     files:
       - volumes/pooler/pooler.exs
       - volumes/pooler/runtime.exs
-  - name: kong-config
-    files:
-      - volumes/api/wrapper.sh
-      - volumes/api/template.yml
       
   # - name: vector-config
   #   files:
