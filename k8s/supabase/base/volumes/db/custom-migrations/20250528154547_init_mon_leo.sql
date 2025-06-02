@@ -530,4 +530,7 @@ CREATE TRIGGER update_channel_on_message_insert AFTER INSERT ON public."Messages
 
 CREATE TRIGGER update_message_updated_at BEFORE UPDATE ON public."Messages" FOR EACH ROW EXECUTE FUNCTION update_updated_at_messages();
 
-
+-- ADD MANUALLY REALTIME ACTIVATION
+ALTER PUBLICATION supabase_realtime ADD TABLE Messages;
+ALTER PUBLICATION supabase_realtime ADD TABLE Channels;
+ALTER PUBLICATION supabase_realtime ADD TABLE ChannelUsers;
