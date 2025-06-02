@@ -134,31 +134,31 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Path(`/auth/v1/verify`)
-      kind: Rule
-      services:
-        - name: supabase-auth
-          port: 9999
-      middlewares:
-        - name: supabase-cors
-        - name: supabase-auth-stripprefix
-    - match: Path(`/auth/v1/callback`)
-      kind: Rule
-      services:
-        - name: supabase-auth
-          port: 9999
-      middlewares:
-        - name: supabase-cors
-        - name: supabase-auth-stripprefix
-    - match: Path(`/auth/v1/authorize`)
-      kind: Rule
-      services:
-        - name: supabase-auth
-          port: 9999
-      middlewares:
-        - name: supabase-cors
-        - name: supabase-auth-stripprefix
-    - match: Path(`/auth/v1`)
+    # - match: Path(`/auth/v1/verify`)
+    #   kind: Rule
+    #   services:
+    #     - name: supabase-auth
+    #       port: 9999
+    #   middlewares:
+    #     - name: supabase-cors
+    #     - name: supabase-auth-stripprefix
+    # - match: Path(`/auth/v1/callback`)
+    #   kind: Rule
+    #   services:
+    #     - name: supabase-auth
+    #       port: 9999
+    #   middlewares:
+    #     - name: supabase-cors
+    #     - name: supabase-auth-stripprefix
+    # - match: Path(`/auth/v1/authorize`)
+    #   kind: Rule
+    #   services:
+    #     - name: supabase-auth
+    #       port: 9999
+    #   middlewares:
+    #     - name: supabase-cors
+    #     - name: supabase-auth-stripprefix
+    - match: Path(`/auth/v1/*`)
       kind: Rule
       services:
         - name: supabase-auth
