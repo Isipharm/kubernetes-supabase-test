@@ -164,6 +164,7 @@ spec:
       filters:
       - type: URLRewrite
         urlRewrite:
+          hostname: realtime-dev.supabas-realtime
           path:
             type: ReplacePrefixMatch
             replacePrefixMatch: /socket
@@ -188,6 +189,7 @@ spec:
       filters:
       - type: URLRewrite
         urlRewrite:
+          hostname: realtime-dev.supabas-realtime
           path:
             type: ReplacePrefixMatch
             replacePrefixMatch: /api
