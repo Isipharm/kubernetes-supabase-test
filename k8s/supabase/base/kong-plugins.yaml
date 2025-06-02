@@ -1,0 +1,93 @@
+# CORS plugin (à appliquer sur les routes concernées)
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: cors
+plugin: cors
+---
+# Key-auth plugin
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: key-auth
+plugin: key-auth
+config:
+  hide_credentials: false
+---
+# Key-auth plugin (hide_credentials: true)
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: key-auth-hide
+plugin: key-auth
+config:
+  hide_credentials: true
+---
+# ACL plugin (admin et anon)
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: acl-admin-anon
+plugin: acl
+config:
+  hide_groups_header: true
+  allow:
+    - admin
+    - anon
+---
+# ACL plugin (admin only)
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: acl-admin
+plugin: acl
+config:
+  hide_groups_header: true
+  allow:
+    - admin
+---
+# Basic-auth plugin (dashboard)
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: basic-auth
+plugin: basic-auth
+config:
+  hide_credentials: true
+---
+# Request transformer (graphql)
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: graphql-transform
+plugin: request-transformer
+config:
+  add:
+    headers:
+      - Content-Profile:graphql_public
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongConsumer
+metadata:
+  name: anon
+username: anon
+credentials:
+  - anon-key-auth
+
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongConsumer
+metadata:
+  name: service-role
+username: service_role
+credentials:
+  - service-key-auth
+
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongConsumer
+metadata:
+  name: dashboard
+username: DASHBOARD
+credentials:
+  - dashboard-auth

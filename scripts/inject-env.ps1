@@ -8,6 +8,11 @@ kubectl create configmap common-config --from-env-file=../k8s/supabase/base/.env
 
 #deploy traefik crds
 kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml --namespace supabase
+kubectl apply -f ../k8s/supabase/base/kong-gateway.yaml
+helm repo add kong https://charts.konghq.com
+helm repo update
+helm install kong kong/ingress -n supabase
+kubectl apply -f ../k8s/argocd/supabase-app.yaml
 
 #kubectl apply -f https://raw.githubusercontent.com/traefik/traefik/v3.4/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml --namespace supabase
 #kubectl apply -f https://raw.githubusercontent.com/traefik/traefik/v3.4/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml --namespace supabase
