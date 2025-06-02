@@ -16,9 +16,9 @@ resources:
   - meta.yaml
   - functions.yaml
   - supavisor.yaml
-  #- kong.yaml
+  - kong.yaml
   - storage.yaml
-  - traefik.yaml
+  #- traefik.yaml
 
 configMapGenerator:
   # - name: common-config
