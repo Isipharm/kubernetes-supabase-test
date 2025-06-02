@@ -36,7 +36,7 @@ spec:
         - name: JWT_SECRET
           value: $(JWT_SECRET)
         - name: SUPABASE_URL
-          value: http://supabase-kong:8000
+          value: http://supabase-traefik
         - name: SUPABASE_ANON_KEY
           value: $(ANON_KEY)
         - name: SUPABASE_SERVICE_ROLE_KEY
