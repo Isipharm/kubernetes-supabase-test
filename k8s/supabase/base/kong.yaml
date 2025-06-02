@@ -402,32 +402,12 @@ credentials:
 
 ---
 apiVersion: configuration.konghq.com/v1
-kind: KongCredential
-metadata:
-  name: anon-key-auth
-consumerRef: anon
-type: key-auth
-config:
-  key: ${SUPABASE_ANON_KEY}
-
----
-apiVersion: configuration.konghq.com/v1
 kind: KongConsumer
 metadata:
   name: service-role
 username: service_role
 credentials:
-  - service-role-key-auth
-
----
-apiVersion: configuration.konghq.com/v1
-kind: KongCredential
-metadata:
-  name: service-role-key-auth
-consumerRef: service-role
-type: key-auth
-config:
-  key: ${SUPABASE_SERVICE_KEY}
+  - service-key-auth
 
 ---
 apiVersion: configuration.konghq.com/v1
@@ -436,18 +416,8 @@ metadata:
   name: dashboard
 username: DASHBOARD
 credentials:
-  - dashboard-basic-auth
+  - dashboard-auth
 
----
-apiVersion: configuration.konghq.com/v1
-kind: KongCredential
-metadata:
-  name: dashboard-basic-auth
-consumerRef: dashboard
-type: basic-auth
-config:
-  username: ${DASHBOARD_USERNAME}
-  password: ${DASHBOARD_PASSWORD}
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass

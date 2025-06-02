@@ -61,3 +61,6 @@ scripts/**/*.cache
 __pycache__/
 *.pyc
 k8s/supabase/base/users.txt
+k8s/supabase/base/dashboard-auth.env
+k8s/supabase/base/anonkey.env
+k8s/supabase/base/servicekey.env
