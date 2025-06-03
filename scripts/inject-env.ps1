@@ -9,7 +9,9 @@ kubectl create secret generic anon-key-auth --from-env-file=../k8s/supabase/base
 
 
 
-kubectl apply -f ../k8s/supabase/base/basic-auth-secret.yaml
+kubectl apply -f ../k8s/supabase/base/basic-auth.yaml
+kubectl apply -f ../k8s/supabase/base/anon-key-auth.yaml
+kubectl apply -f ../k8s/supabase/base/service-key-auth.yaml
 ######kubectl create secret generic basic-auth --from-env-file=../k8s/supabase/base/dashboard-auth.env --namespace supabase
 
 
