@@ -109,29 +109,3 @@ spec:
   ports:
     - port: 4000
       targetPort: 4000
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: realtime-v1
-spec:
-  entryPoints:
-    - web
-  routes:
-    - match: PathPrefix(`/realtime/v1`)
-      kind: Rule
-      services:
-        - name: supabase-realtime
-          port: 4000
-          passHostHeader: true
-      middlewares:
-      - name: supabase-cors
-      - name: supabase-realtime-stripprefix
-    - match: PathPrefix(`/realtime/v1/api`)
-      kind: Rule
-      services:
-        - name: supabase-realtime
-          port: 4000
-      middlewares:
-      - name: supabase-cors
-      - name: supabase-realtime-stripprefix

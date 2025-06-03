@@ -19,7 +19,6 @@ resources:
   #- kong-plugins.yaml
   - kong-routes.yaml
   - storage.yaml
-  #- traefik.yaml
 
 configMapGenerator:
   # - name: common-config

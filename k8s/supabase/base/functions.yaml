@@ -5,7 +5,7 @@ metadata:
   labels:
     app: functions
 spec:
-  replicas: 1
+  replicas: 5
   selector:
     matchLabels:
       app: functions
@@ -69,20 +69,3 @@ spec:
   ports:
     - port: 9000
       targetPort: 9000
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: functions-v1
-spec:
-  entryPoints:
-    - web
-  routes:
-    - match: PathPrefix(`/functions/v1`)
-      kind: Rule
-      services:
-        - name: supabase-functions
-          port: 9000
-      middlewares:
-      - name: supabase-cors
-      - name: supabase-functions-stripprefix
