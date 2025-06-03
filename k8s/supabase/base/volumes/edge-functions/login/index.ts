@@ -17,7 +17,7 @@ interface AuthRequest {
 Deno.serve(async (req) => {
     try {
         const request: AuthRequest = await req.json();
-
+        console.log("Received request", request);
         const { error } = await supabase.auth
             .signInWithPassword({
                 email: `${request.idExterne}@leo-officine.fr`,
