@@ -18,13 +18,10 @@ config:
 apiVersion: configuration.konghq.com/v1
 kind: KongPlugin
 metadata:
-  name: anon-admin-acl
+  name: anyone-acl
 plugin: acl
 config:
-  hide_groups_header: true
-  allow:
-    - admin
-    - anon
+  allow: ["admin","anon"]
 ---
 # ACL plugin (admin only)
 apiVersion: configuration.konghq.com/v1
@@ -33,9 +30,7 @@ metadata:
   name: admin-acl
 plugin: acl
 config:
-  hide_groups_header: true
-  allow:
-    - admin
+  allow: ["admin"]
 ---
 # Basic-auth plugin (dashboard)
 apiVersion: configuration.konghq.com/v1
@@ -66,7 +61,6 @@ metadata:
 username: anon
 credentials:
   - anon-key-auth
-  - admin-acl
   - anon-acl
 ---
 apiVersion: configuration.konghq.com/v1
