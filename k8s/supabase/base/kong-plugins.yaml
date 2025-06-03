@@ -70,6 +70,8 @@ apiVersion: configuration.konghq.com/v1
 kind: KongConsumer
 metadata:
   name: anon
+  annotations:
+     kubernetes.io/ingress.class: kong
 username: anon
 credentials:
   - anon-key-auth
@@ -79,6 +81,8 @@ apiVersion: configuration.konghq.com/v1
 kind: KongConsumer
 metadata:
   name: service-role
+  annotations:
+     kubernetes.io/ingress.class: kong
 username: service_role
 credentials:
   - service-key-auth
@@ -88,6 +92,8 @@ apiVersion: configuration.konghq.com/v1
 kind: KongConsumer
 metadata:
   name: dashboard
+  annotations:
+     kubernetes.io/ingress.class: kong
 username: DASHBOARD
 credentials:
   - dashboard-auth
