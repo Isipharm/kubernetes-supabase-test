@@ -77,7 +77,7 @@ kind: HTTPRoute
 metadata:
   name: auth-v1
   annotations:
-    konghq.com/plugins: cors,key-auth,anon-acl
+    konghq.com/plugins: cors,key-auth,anon-admin-acl
 spec:
   parentRefs:
     - name: kong
@@ -101,7 +101,7 @@ kind: HTTPRoute
 metadata:
   name: rest-v1
   annotations:
-    konghq.com/plugins: cors,key-auth,anon-acl
+    konghq.com/plugins: cors,key-auth,anon-admin-acl
 spec:
   parentRefs:
     - name: kong
@@ -125,7 +125,7 @@ kind: HTTPRoute
 metadata:
   name: graphql-v1
   annotations:
-    konghq.com/plugins: cors,key-auth,graphql-transform,anon-acl
+    konghq.com/plugins: cors,key-auth,graphql-transform,anon-admin-acl
 spec:
   parentRefs:
     - name: kong
@@ -149,7 +149,7 @@ kind: HTTPRoute
 metadata:
   name: realtime-v1-ws
   annotations:
-    konghq.com/plugins: cors,key-auth,anon-acl
+    konghq.com/plugins: cors,key-auth,anon-admin-acl
 spec:
   parentRefs:
     - name: kong
@@ -174,7 +174,7 @@ kind: HTTPRoute
 metadata:
   name: realtime-v1-rest
   annotations:
-    konghq.com/plugins: cors,key-auth,anon-acl
+    konghq.com/plugins: cors,key-auth,anon-admin-acl
 spec:
   parentRefs:
     - name: kong

@@ -18,7 +18,7 @@ config:
 apiVersion: configuration.konghq.com/v1
 kind: KongPlugin
 metadata:
-  name: acl-admin-anon
+  name: anon-admin-acl
 plugin: acl
 config:
   hide_groups_header: true
@@ -30,7 +30,7 @@ config:
 apiVersion: configuration.konghq.com/v1
 kind: KongPlugin
 metadata:
-  name: acl-admin
+  name: admin-acl
 plugin: acl
 config:
   hide_groups_header: true
@@ -66,7 +66,8 @@ metadata:
 username: anon
 credentials:
   - anon-key-auth
-  - acl-admin-anon
+  - admin-acl
+  - anon-acl
 ---
 apiVersion: configuration.konghq.com/v1
 kind: KongConsumer
@@ -77,7 +78,7 @@ metadata:
 username: service_role
 credentials:
   - service-key-auth
-  - acl-admin
+  - admin-acl
 ---
 apiVersion: configuration.konghq.com/v1
 kind: KongConsumer
