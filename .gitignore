@@ -64,3 +64,4 @@ k8s/supabase/base/users.txt
 k8s/supabase/base/dashboard-auth.env
 k8s/supabase/base/anonkey.env
 k8s/supabase/base/servicekey.env
+k8s/supabase/base/basic-auth-secret.yaml
