@@ -293,7 +293,7 @@ kind: HTTPRoute
 metadata:
   name: dashboard
   annotations:
-    konghq.com/plugins: supabase-cors,supabase-dashboard-basic-auth
+    konghq.com/plugins: cors,basic-auth
 spec:
   parentRefs:
     - name: kong

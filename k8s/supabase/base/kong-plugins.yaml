@@ -50,7 +50,7 @@ config:
 apiVersion: configuration.konghq.com/v1
 kind: KongPlugin
 metadata:
-  name: dashboard-basic-auth
+  name: basic-auth
 plugin: basic-auth
 config:
   hide_credentials: true
@@ -96,4 +96,4 @@ metadata:
      kubernetes.io/ingress.class: kong
 username: DASHBOARD
 credentials:
-  - dashboard-basic-auth
+  - basic-auth
