@@ -85,6 +85,6 @@ metadata:
   name: dashboard
   annotations:
      kubernetes.io/ingress.class: kong
-username: DASHBOARD
+username: dashboard
 credentials:
   - dashboard-basic-auth
