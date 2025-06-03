@@ -16,7 +16,7 @@ resources:
   - meta.yaml
   - functions.yaml
   - supavisor.yaml
-  - kong-plugins.yaml
+  #- kong-plugins.yaml
   - kong-routes.yaml
   - storage.yaml
   #- traefik.yaml
