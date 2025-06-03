@@ -62,17 +62,17 @@ username: anon
 credentials:
   - anon-key-auth
   - anon-acl
----
-apiVersion: configuration.konghq.com/v1
-kind: KongConsumer
-metadata:
-  name: service-role
-  annotations:
-     kubernetes.io/ingress.class: kong
-username: service_role
-credentials:
-  - service-key-auth
-  - admin-acl
+# ---
+# apiVersion: configuration.konghq.com/v1
+# kind: KongConsumer
+# metadata:
+#   name: service-role
+#   annotations:
+#      kubernetes.io/ingress.class: kong
+# username: service_role
+# credentials:
+#   - service-key-auth
+#   - admin-acl
 ---
 apiVersion: configuration.konghq.com/v1
 kind: KongConsumer
