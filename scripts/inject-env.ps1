@@ -27,6 +27,7 @@ kubectl apply -f ../k8s/supabase/base/kong-plugins.yaml
 helm repo add kong https://charts.konghq.com
 helm repo update
 helm install kong kong/ingress -n supabase
+kubectl annotate service kong-gateway-proxy service.beta.kubernetes.io/azure-dns-label-name=supabase --overwrite --namespace supabase
 kubectl apply -f ../k8s/argocd/supabase-app.yaml
 
 #kubectl apply -f https://raw.githubusercontent.com/traefik/traefik/v3.4/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml --namespace supabase
