@@ -14,15 +14,6 @@ plugin: key-auth
 config:
   hide_credentials: false
 ---
-# Key-auth plugin (hide_credentials: true)
-apiVersion: configuration.konghq.com/v1
-kind: KongPlugin
-metadata:
-  name: key-auth-hide
-plugin: key-auth
-config:
-  hide_credentials: true
----
 # ACL plugin (admin et anon)
 apiVersion: configuration.konghq.com/v1
 kind: KongPlugin
@@ -75,7 +66,7 @@ metadata:
 username: anon
 credentials:
   - anon-key-auth
-
+  - acl-admin-anon
 ---
 apiVersion: configuration.konghq.com/v1
 kind: KongConsumer
@@ -86,7 +77,7 @@ metadata:
 username: service_role
 credentials:
   - service-key-auth
-
+  - acl-admin
 ---
 apiVersion: configuration.konghq.com/v1
 kind: KongConsumer

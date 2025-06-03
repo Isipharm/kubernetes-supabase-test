@@ -101,7 +101,7 @@ kind: HTTPRoute
 metadata:
   name: rest-v1
   annotations:
-    konghq.com/plugins: cors,key-auth-hide,acl-admin-anon
+    konghq.com/plugins: cors,key-auth,acl-admin-anon
 spec:
   parentRefs:
     - name: kong
@@ -125,7 +125,7 @@ kind: HTTPRoute
 metadata:
   name: graphql-v1
   annotations:
-    konghq.com/plugins: cors,key-auth-hide,graphql-transform,acl-admin-anon
+    konghq.com/plugins: cors,key-auth,graphql-transform,acl-admin-anon
 spec:
   parentRefs:
     - name: kong
