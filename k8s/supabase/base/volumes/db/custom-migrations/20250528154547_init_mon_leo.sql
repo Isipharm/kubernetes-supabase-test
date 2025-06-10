@@ -534,3 +534,7 @@ CREATE TRIGGER update_message_updated_at BEFORE UPDATE ON public."Messages" FOR 
 ALTER PUBLICATION supabase_realtime ADD TABLE "Messages";
 ALTER PUBLICATION supabase_realtime ADD TABLE "Channels";
 ALTER PUBLICATION supabase_realtime ADD TABLE "ChannelUsers";
+
+-- ADD INDEX ON MESSAGES TABLE
+CREATE UNIQUE INDEX "Messages_channelId_id_idx" ON public."Messages" USING btree ("channelId", id);
+ALTER TABLE public."Messages" REPLICA IDENTITY USING INDEX "Messages_channelId_id_idx";
