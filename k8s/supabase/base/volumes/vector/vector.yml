@@ -5,8 +5,8 @@ api:
 sources:
   kubernetes:
     type: kubernetes_logs
-    exclude_containers:
-      - supabase-vector
+    # exclude_containers:
+    #   - supabase-vector
 
 transforms:
   project_logs:
