@@ -5,8 +5,7 @@ api:
 sources:
   kubernetes:
     type: kubernetes_logs
-    # exclude_containers:
-    #   - supabase-vector
+    extra_field_selector: "metadata.namespace=supabase"
 
 transforms:
   project_logs:

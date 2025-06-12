@@ -68,14 +68,27 @@ spec:
       - name: vector-volume
         configMap:
           name: vector-config
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: vector
-# spec:
-#   ports:
-#     - port: 4000
-#       targetPort: 4000
-#   selector:
-#     app: vector
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: vector-log-collector
+  namespace: supabase
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "namespaces"]
+    verbs: ["list", "watch", "get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: vector-log-collector-binding
+  namespace: supabase
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: vector-log-collector
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: supabase
