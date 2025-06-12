@@ -219,14 +219,14 @@ sinks:
     request:
       retry_max_duration_secs: 10
     uri: 'http://supabase-analytics:4000/api/logs?source_name=storage.logs.prod.2&api_key=${LOGFLARE_API_KEY?LOGFLARE_API_KEY is required}'
-  logflare_kong:
-    type: 'http'
-    inputs:
-      - kong_logs
-      - kong_err
-    encoding:
-      codec: 'json'
-    method: 'post'
-    request:
-      retry_max_duration_secs: 10
-    uri: 'http://supabase-analytics:4000/api/logs?source_name=cloudflare.logs.prod&api_key=${LOGFLARE_API_KEY?LOGFLARE_API_KEY is required}'
+  # logflare_kong:
+  #   type: 'http'
+  #   inputs:
+  #     - kong_logs
+  #     - kong_err
+  #   encoding:
+  #     codec: 'json'
+  #   method: 'post'
+  #   request:
+  #     retry_max_duration_secs: 10
+  #   uri: 'http://supabase-analytics:4000/api/logs?source_name=cloudflare.logs.prod&api_key=${LOGFLARE_API_KEY?LOGFLARE_API_KEY is required}'
