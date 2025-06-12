@@ -14,6 +14,7 @@ spec:
       labels:
         app: vector
     spec:
+      serviceAccountName: default
       initContainers:
       - name: vector-migrations
         image: bfogarty/envsubst:latest
