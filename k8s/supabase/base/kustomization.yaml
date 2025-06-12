@@ -19,6 +19,7 @@ resources:
   #- kong-plugins.yaml
   - kong-routes.yaml
   - storage.yaml
+  - vector.yaml
 
 configMapGenerator:
   # - name: common-config
