@@ -45,7 +45,7 @@ configMapGenerator:
       - volumes/pooler/runtime.exs
   - name: vector-config
     files:
-      - volumes/logs/vector.yml
+      - volumes/vector/vector.yml
       
   # - name: vector-config
   #   files:
