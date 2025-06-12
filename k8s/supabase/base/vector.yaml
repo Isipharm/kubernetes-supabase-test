@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vector
+  labels:
+    app: vector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vector
+  template:
+    metadata:
+      labels:
+        app: vector
+    spec:
+      initContainers:
+      - name: vector-migrations
+        image: bfogarty/envsubst:latest
+        command: ['/bin/sh', '-c']
+        args:
+          - |
+            echo "Running Vector migrations..."
+            envsubst < /etc/vector/vector.yml > /etc/vector/tmp/temp.yml
+
+        envFrom:
+          - configMapRef:
+              name: supabase-common-config
+          - secretRef:
+              name: supabase-common-secrets
+        volumeMounts:
+          - name: vector-volume
+            mountPath: /etc/vector/vector.yml
+            subPath: vector.yml
+          - name: vector-template
+            mountPath: /etc/vector/tmp
+      containers:
+      - name: vector
+        image: timberio/vector
+        command: ["--config", "/etc/vector/vector.yml"]
+        # ports:
+        # - containerPort: 4000
+        #   name: vector
+        # resources:
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "100m"
+        #   limits:
+        #     memory: "2Gi"
+        #     cpu: "500m"
+        env:
+        - name:  LOGFLARE_API_KEY
+          value: $(LOGFLARE_API_KEY)
+        envFrom:
+          - configMapRef:
+              name: common-config
+        volumeMounts:
+        - name: vector-template
+          mountPath: /etc/vector/tmp/temp.yml
+          subPath: temp.yml
+      volumes:
+      - name: vector-template
+        emptyDir: {}
+      - name: vector-volume
+        configMap:
+          name: vector-config
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: vector
+# spec:
+#   ports:
+#     - port: 4000
+#       targetPort: 4000
+#   selector:
+#     app: vector

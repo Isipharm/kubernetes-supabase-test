@@ -42,6 +42,9 @@ configMapGenerator:
     files:
       - volumes/pooler/pooler.exs
       - volumes/pooler/runtime.exs
+  - name: vector-config
+    files:
+      - volumes/logs/vector.yml
       
   # - name: vector-config
   #   files:
@@ -84,9 +87,6 @@ images:
   - name: supabase/supavisor
     newName: supabase/supavisor
     newTag: 2.5.1
-  - name: kong
-    newName: kong
-    newTag: 2.8.1
-  - name: traefik
-    newName: traefik
-    newTag: v3.4
+  - name: timberio/vector
+    newName: timberio/vector
+    newTag: 0.28.1-alpine
