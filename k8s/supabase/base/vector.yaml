@@ -22,7 +22,7 @@ roleRef:
   name: vector-log-collector
 subjects:
   - kind: ServiceAccount
-    name: vector-sa
+    name: supabase-vector-sa
     namespace: supabase
 ---
 apiVersion: apps/v1
