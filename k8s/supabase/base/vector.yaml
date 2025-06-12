@@ -19,7 +19,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: vector-log-collector
+  name: supabase-vector-log-collector
 subjects:
   - kind: ServiceAccount
     name: supabase-vector-sa
