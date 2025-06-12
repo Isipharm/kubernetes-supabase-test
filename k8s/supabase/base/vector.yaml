@@ -25,9 +25,9 @@ spec:
 
         envFrom:
           - configMapRef:
-              name: supabase-common-config
+              name: common-config
           - secretRef:
-              name: supabase-common-secrets
+              name: common-secrets
         volumeMounts:
           - name: vector-volume
             mountPath: /etc/vector/vector.yml
