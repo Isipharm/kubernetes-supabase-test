@@ -38,49 +38,49 @@ transforms:
       functions: '.appname == "supabase-functions"'
       db: '.appname == "supabase-db"'
   # Ignores non nginx errors since they are related with kong booting up
-  kong_logs:
-    type: remap
-    inputs:
-      - router.kong
-    source: |-
-      req, err = parse_nginx_log(.event_message, "combined")
-      if err == null {
-          .timestamp = req.timestamp
-          .metadata.request.headers.referer = req.referer
-          .metadata.request.headers.user_agent = req.agent
-          .metadata.request.headers.cf_connecting_ip = req.client
-          .metadata.request.method = req.method
-          .metadata.request.path = req.path
-          .metadata.request.protocol = req.protocol
-          .metadata.response.status_code = req.status
-      }
-      if err != null {
-        abort
-      }
+  # kong_logs:
+  #   type: remap
+  #   inputs:
+  #     - router.kong
+  #   source: |-
+  #     req, err = parse_nginx_log(.event_message, "combined")
+  #     if err == null {
+  #         .timestamp = req.timestamp
+  #         .metadata.request.headers.referer = req.referer
+  #         .metadata.request.headers.user_agent = req.agent
+  #         .metadata.request.headers.cf_connecting_ip = req.client
+  #         .metadata.request.method = req.method
+  #         .metadata.request.path = req.path
+  #         .metadata.request.protocol = req.protocol
+  #         .metadata.response.status_code = req.status
+  #     }
+  #     if err != null {
+  #       abort
+  #     }
   # Ignores non nginx errors since they are related with kong booting up
-  kong_err:
-    type: remap
-    inputs:
-      - router.kong
-    source: |-
-      .metadata.request.method = "GET"
-      .metadata.response.status_code = 200
-      parsed, err = parse_nginx_log(.event_message, "error")
-      if err == null {
-          .timestamp = parsed.timestamp
-          .severity = parsed.severity
-          .metadata.request.host = parsed.host
-          .metadata.request.headers.cf_connecting_ip = parsed.client
-          url, err = split(parsed.request, " ")
-          if err == null {
-              .metadata.request.method = url[0]
-              .metadata.request.path = url[1]
-              .metadata.request.protocol = url[2]
-          }
-      }
-      if err != null {
-        abort
-      }
+  # kong_err:
+  #   type: remap
+  #   inputs:
+  #     - router.kong
+  #   source: |-
+  #     .metadata.request.method = "GET"
+  #     .metadata.response.status_code = 200
+  #     parsed, err = parse_nginx_log(.event_message, "error")
+  #     if err == null {
+  #         .timestamp = parsed.timestamp
+  #         .severity = parsed.severity
+  #         .metadata.request.host = parsed.host
+  #         .metadata.request.headers.cf_connecting_ip = parsed.client
+  #         url, err = split(parsed.request, " ")
+  #         if err == null {
+  #             .metadata.request.method = url[0]
+  #             .metadata.request.path = url[1]
+  #             .metadata.request.protocol = url[2]
+  #         }
+  #     }
+  #     if err != null {
+  #       abort
+  #     }
   # Gotrue logs are structured json strings which frontend parses directly. But we keep metadata for consistency.
   auth_logs:
     type: remap
