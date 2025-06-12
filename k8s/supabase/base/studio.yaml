@@ -58,9 +58,9 @@ spec:
         - name: DEFAULT_PROJECT_NAME
           value: $(STUDIO_DEFAULT_PROJECT)
         - name: OPENAI_API_KEY
-          value: $(OPENAI_API_KEY:-)
+          value: $(OPENAI_API_KEY)
         - name: SUPABASE_URL
-          value: http://supabase-kong:8000
+          value: http://kong-gateway-proxy
         - name: SUPABASE_PUBLIC_URL
           value: $(SUPABASE_PUBLIC_URL)
         - name: SUPABASE_ANON_KEY

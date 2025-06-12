@@ -48,8 +48,8 @@ spec:
         #     memory: "2Gi"
         #     cpu: "500m"
         env:
-        - name:  LOGFLARE_NODE_HOST
-          value: 127.0.0.1
+        # - name:  LOGFLARE_NODE_HOST
+        #   value: 127.0.0.1
         - name: DB_USERNAME
           value: supabase_admin
         - name: DB_DATABASE
