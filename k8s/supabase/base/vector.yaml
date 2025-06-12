@@ -37,7 +37,7 @@ spec:
       containers:
       - name: vector
         image: timberio/vector
-        command: ["--config", "/etc/vector/tmp/temp.yml"]
+        args: ["--config", "/etc/vector/tmp/temp.yml"]
         # ports:
         # - containerPort: 4000
         #   name: vector
