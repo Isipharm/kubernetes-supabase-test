@@ -77,10 +77,22 @@ spec:
         #     memory: "2Gi"
         #     cpu: "500m"
         env:
-        - name: VECTOR_SELF_NODE_NAME 
+        - name: VECTOR_SELF_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: VECTOR_SELF_POD_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        - name: VECTOR_SELF_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: PROCFS_ROOT
+          value: "/host/proc"
+        - name: SYSFS_ROOT
+          value: "/host/sys"
         - name:  LOGFLARE_API_KEY
           value: $(LOGFLARE_API_KEY)
         envFrom:
@@ -90,27 +102,33 @@ spec:
         - name: vector-template
           mountPath: /etc/vector/tmp/temp.yml
           subPath: temp.yml
-        - name: var-log
-          mountPath: /var/log/
+        - mountPath: /var/log/
+          name: var-log
+          readOnly: true
+        - mountPath: /var/lib
+          name: var-lib
+          readOnly: true
+        - mountPath: /host/proc
+          name: procfs
+          readOnly: true
+        - mountPath: /host/sys
+          name: sysfs
+          readOnly: true
       volumes:
       - name: vector-template
         emptyDir: {}
       - name: vector-volume
         configMap:
           name: vector-config
-      - name: var-log
+      - name: var-log 
         hostPath:
           path: /var/log/
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: vector
-  labels:
-    app: vector
-spec:
-  selector:
-    app: vector
-  ports:
-    - port: 9001
-      targetPort: 9001
+      - name: var-lib
+        hostPath:
+          path: /var/lib/
+      - name: procfs
+        hostPath:
+          path: /proc
+      - name: sysfs
+        hostPath:
+          path: /sys

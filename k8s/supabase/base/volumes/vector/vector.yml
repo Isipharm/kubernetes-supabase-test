@@ -1,6 +1,7 @@
 api:
   enabled: true
   address: 0.0.0.0:9001
+  playground: false
 
 sources:
   kubernetes_host:
