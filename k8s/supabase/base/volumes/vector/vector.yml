@@ -19,8 +19,8 @@ transforms:
       .project = "default"
       .event_message = del(.message)
       .appname = del(.kubernetes.container_name)
-      # del(.file)
-      # del(.kubernetes)
+      del(.file)
+      del(.kubernetes)
       del(.source_type)
       del(.stream)
   router:
