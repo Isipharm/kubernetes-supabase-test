@@ -155,7 +155,8 @@ sinks:
   debug:
     type: console
     inputs: [kubernetes_host]
-    encoding: json
+    encoding:
+      codec: 'json'
   # logflare_auth:
   #   type: 'http'
   #   inputs:
