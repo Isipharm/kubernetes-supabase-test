@@ -77,10 +77,10 @@ spec:
         #     memory: "2Gi"
         #     cpu: "500m"
         env:
-        # - name: VECTOR_SELF_NODE_NAME 
-        #   valueFrom:
-        #     fieldRef:
-        #       fieldPath: metadata.name
+        - name: VECTOR_SELF_NODE_NAME 
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
         - name:  LOGFLARE_API_KEY
           value: $(LOGFLARE_API_KEY)
         envFrom:

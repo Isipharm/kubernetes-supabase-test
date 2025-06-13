@@ -5,8 +5,8 @@ api:
 sources:
   kubernetes_host:
     type: kubernetes_logs
-    extra_namespace_label_selector: vector.dev/include=yes
-    extra_label_selector: app.kubernetes.io/name!=supabase-vector
+    # extra_namespace_label_selector: vector.dev/include=yes
+    # extra_label_selector: app.kubernetes.io/name!=supabase-vector
 
 transforms:
   project_logs:
