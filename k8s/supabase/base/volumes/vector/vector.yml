@@ -21,17 +21,17 @@ transforms:
       # del(.kubernetes)
       del(.source_type)
       del(.stream)
-  router:
-    type: route
-    inputs:
-      - project_logs
-    route:
-      auth: '.appname == "supabase-auth"'
-      rest: '.appname == "supabase-rest"'
-      realtime: '.appname == "supabase-realtime"'
-      storage: '.appname == "supabase-storage"'
-      functions: '.appname == "supabase-functions"'
-      db: '.appname == "supabase-db"'
+  # router:
+  #   type: route
+  #   inputs:
+  #     - project_logs
+  #   route:
+  #     auth: '.appname == "supabase-auth"'
+  #     rest: '.appname == "supabase-rest"'
+  #     realtime: '.appname == "supabase-realtime"'
+  #     storage: '.appname == "supabase-storage"'
+  #     functions: '.appname == "supabase-functions"'
+  #     db: '.appname == "supabase-db"'
   # Gotrue logs are structured json strings which frontend parses directly. But we keep metadata for consistency.
   # auth_logs:
   #   type: remap
