@@ -108,12 +108,12 @@ spec:
         # - mountPath: /var/lib
         #   name: var-lib
         #   readOnly: true
-        - mountPath: /host/proc
-          name: procfs
-          readOnly: true
-        - mountPath: /host/sys
-          name: sysfs
-          readOnly: true
+        # - mountPath: /host/proc
+        #   name: procfs
+        #   readOnly: true
+        # - mountPath: /host/sys
+        #   name: sysfs
+        #   readOnly: true
       volumes:
       - name: vector-template
         emptyDir: {}
@@ -126,9 +126,9 @@ spec:
       # - name: var-lib
       #   hostPath:
       #     path: /var/lib/
-      - name: procfs
-        hostPath:
-          path: /proc
-      - name: sysfs
-        hostPath:
-          path: /sys
+      # - name: procfs
+      #   hostPath:
+      #     path: /proc
+      # - name: sysfs
+      #   hostPath:
+      #     path: /sys
