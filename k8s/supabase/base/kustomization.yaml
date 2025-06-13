@@ -90,4 +90,4 @@ images:
     newTag: 2.5.1
   - name: timberio/vector
     newName: timberio/vector
-    newTag: 0.28.1-alpine
+    newTag: 0.47.0-alpine
