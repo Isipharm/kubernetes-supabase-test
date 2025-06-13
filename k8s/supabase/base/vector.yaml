@@ -96,3 +96,16 @@ spec:
       - name: vector-volume
         configMap:
           name: vector-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vector
+  labels:
+    app: vector
+spec:
+  selector:
+    app: vector
+  ports:
+    - port: 9001
+      targetPort: 9001

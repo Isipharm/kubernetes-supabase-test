@@ -3,26 +3,23 @@ api:
   address: 0.0.0.0:9001
 
 sources:
-  kubernetes:
+  kubernetes_host:
     type: kubernetes_logs
-    extra_field_selector: "metadata.namespace=supabase"
+    extra_namespace_label_selector: vector.dev/include=yes
+    extra_label_selector: app.kubernetes.io/name!=supabase-vector
 
 transforms:
   project_logs:
     type: remap
     inputs:
-      - kubernetes
+      - kubernetes_host
     source: |-
       .project = "default"
       .event_message = del(.message)
-      .appname = del(.container_name)
-      del(.container_created_at)
-      del(.container_id)
+      .appname = del(.kubernetes.container_name)
+      del(.file)
+      del(.kubernetes)
       del(.source_type)
-      del(.stream)
-      del(.label)
-      del(.image)
-      del(.host)
       del(.stream)
   router:
     type: route
