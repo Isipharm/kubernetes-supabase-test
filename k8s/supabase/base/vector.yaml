@@ -41,7 +41,7 @@ spec:
       labels:
         app: vector
     spec:
-      serviceAccountName: vector-sa
+      serviceAccountName: supabase-vector-sa
       initContainers:
       - name: vector-migrations
         image: bfogarty/envsubst:latest
