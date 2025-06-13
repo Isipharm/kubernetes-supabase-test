@@ -105,9 +105,9 @@ spec:
         - mountPath: /var/log/
           name: var-log
           readOnly: true
-        - mountPath: /var/lib
-          name: var-lib
-          readOnly: true
+        # - mountPath: /var/lib
+        #   name: var-lib
+        #   readOnly: true
         - mountPath: /host/proc
           name: procfs
           readOnly: true
@@ -123,9 +123,9 @@ spec:
       - name: var-log 
         hostPath:
           path: /var/log/
-      - name: var-lib
-        hostPath:
-          path: /var/lib/
+      # - name: var-lib
+      #   hostPath:
+      #     path: /var/lib/
       - name: procfs
         hostPath:
           path: /proc
