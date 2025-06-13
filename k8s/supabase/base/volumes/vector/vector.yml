@@ -6,7 +6,6 @@ api:
 sources:
   kubernetes_host:
     type: kubernetes_logs
-    read_from: "beginning"
     # include_paths_glob_patterns: ["/var/log/pods/*/*/*.log"]
     extra_namespace_label_selector: vector.dev/include=yes
     extra_label_selector: app.kubernetes.io/name!=supabase-vector
