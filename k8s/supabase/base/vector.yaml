@@ -90,12 +90,17 @@ spec:
         - name: vector-template
           mountPath: /etc/vector/tmp/temp.yml
           subPath: temp.yml
+        - name: var-log
+          mountPath: /var/log/
       volumes:
       - name: vector-template
         emptyDir: {}
       - name: vector-volume
         configMap:
           name: vector-config
+      - name: var-log
+        hostPath:
+          path: /var/log/
 ---
 apiVersion: v1
 kind: Service
