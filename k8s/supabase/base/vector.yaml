@@ -4,21 +4,21 @@ metadata:
   name: vector-sa
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
-  name: vector-log-collector
+  name: supabase-vector-log-collector
 rules:
   - apiGroups: [""]
     resources: ["pods", "namespaces"]
     verbs: ["list", "watch", "get"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
-  name: vector-log-collector-binding
+  name: supabase-vector-log-collector-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: supabase-vector-log-collector
 subjects:
   - kind: ServiceAccount
