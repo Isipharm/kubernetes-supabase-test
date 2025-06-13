@@ -126,9 +126,9 @@ spec:
       # - name: var-lib
       #   hostPath:
       #     path: /var/lib/
-      # - name: procfs
-      #   hostPath:
-      #     path: /proc
-      # - name: sysfs
-      #   hostPath:
-      #     path: /sys
+      - name: procfs
+        hostPath:
+          path: /proc
+      - name: sysfs
+        hostPath:
+          path: /sys
