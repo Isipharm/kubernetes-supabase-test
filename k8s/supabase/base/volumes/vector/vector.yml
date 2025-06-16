@@ -11,11 +11,11 @@ sources:
 
 transforms:
   default_logs:
-  type: remap
-  inputs: [router.default]
-  source: |-
-    .metadata.unstructured = true
-    .event_message = .event_message ?? .message
+    type: remap
+    inputs: [router.default]
+    source: |-
+      .metadata.unstructured = true
+      .event_message = .event_message ?? .message
   project_logs:
     type: remap
     inputs:
