@@ -35,12 +35,12 @@ transforms:
     inputs:
       - project_logs
     route:
-      auth: '.appname == "supabase-auth"'
-      rest: '.appname == "supabase-rest"'
-      realtime: '.appname == "supabase-realtime"'
-      storage: '.appname == "supabase-storage"'
-      functions: '.appname == "supabase-functions"'
-      db: '.appname == "supabase-db"'
+      auth: '.appname == "auth" || .appname == "supabase-auth"'
+      rest: '.appname == "rest" || .appname == "supabase-rest"'
+      realtime: '.appname == "realtime" || .appname == "supabase-realtime"'
+      storage: '.appname == "storage" || .appname == "supabase-storage"'
+      functions: '.appname == "functions" || .appname == "supabase-functions"'
+      db: '.appname == "db" || .appname == "supabase-db"'
       analytics: '.appname == "analytics" || .appname == "supabase-analytics"'
       default: '.appname != "supabase-auth" && .appname != "supabase-rest" && .appname != "supabase-realtime" && .appname != "supabase-storage" && .appname != "supabase-functions" && .appname != "supabase-db" && .appname != "supabase-analytics"'
   #Gotrue logs are structured json strings which frontend parses directly. But we keep metadata for consistency.
