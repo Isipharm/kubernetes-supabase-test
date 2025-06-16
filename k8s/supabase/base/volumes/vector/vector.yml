@@ -39,7 +39,7 @@ transforms:
       storage: '.appname == "supabase-storage"'
       functions: '.appname == "supabase-functions"'
       db: '.appname == "supabase-db"'
-      default: true
+      default: '.appname != "supabase-auth" && .appname != "supabase-rest" && .appname != "supabase-realtime" && .appname != "supabase-storage" && .appname != "supabase-functions" && .appname != "supabase-db"'
   #Gotrue logs are structured json strings which frontend parses directly. But we keep metadata for consistency.
   auth_logs:
     type: remap
