@@ -114,6 +114,12 @@ transforms:
       .metadata.parsed.error_severity = upcase!(.metadata.parsed.error_severity)
 
 sinks:
+  debug_output:
+    type: console
+    inputs:
+      - project_logs
+    encoding:
+      codec: 'json'
   logflare_auth:
     type: 'http'
     inputs:
