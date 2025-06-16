@@ -106,18 +106,8 @@ spec:
           subPath: temp.yml
         - name: data
           mountPath: "/vector-data-dir"
-        - mountPath: /var/log/
+        - mountPath: /var/log/pods
           name: var-log
-          readOnly: true
-        # - mountPath: /var/lib
-        #   name: var-lib
-        #   readOnly: true
-        - mountPath: /host/proc
-          name: procfs
-          readOnly: true
-        - mountPath: /host/sys
-          name: sysfs
-          readOnly: true
       volumes:
       - name: vector-template
         emptyDir: {}
@@ -129,13 +119,4 @@ spec:
           path: "/var/lib/vector"
       - name: var-log 
         hostPath:
-          path: /var/log/
-      # - name: var-lib
-      #   hostPath:
-      #     path: /var/lib/
-      - name: procfs
-        hostPath:
-          path: /proc
-      - name: sysfs
-        hostPath:
-          path: /sys
+          path: /var/log/pods
