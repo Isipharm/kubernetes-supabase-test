@@ -50,7 +50,7 @@ transforms:
     inputs:
       - router.rest
     source: |-
-     parsed, err = parse_regex(.event_message, r'^(?P<day>\d+)/(?P<month>\w+)/(?P<year>\d+):(?P<time>\d+:\d+:\d+)\s+\+\d+')
+      parsed, err = parse_regex(.event_message, r'^(?P<day>\d+)/(?P<month>\w+)/(?P<year>\d+):(?P<time>\d+:\d+:\d+)\s+\+\d+')
       if err == null && exists(parsed.day) && exists(parsed.month) && exists(parsed.year) && exists(parsed.time) {
         # Conversion du mois
         month = parsed.month
