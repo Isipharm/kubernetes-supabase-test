@@ -52,16 +52,33 @@ transforms:
     source: |-
       parsed, err = parse_regex(.event_message, r'^(?P<day>\d+)/(?P<month>\w+)/(?P<year>\d+):(?P<time>.*)')
       if err == null {
-        month = case(
-          parsed.month == "Jan", "01",
-          parsed.month == "Feb", "02",
-          parsed.month == "Mar", "03",
-          parsed.month == "Apr", "04",
-          parsed.month == "May", "05",
-          parsed.month == "Jun", "06",
-          # ... complète pour les autres mois
-          parsed.month
-        )
+        if parsed.month == "Jan" {
+          month = "01"
+        } else if parsed.month == "Feb" {
+          month = "02"
+        } else if parsed.month == "Mar" {
+          month = "03"
+        } else if parsed.month == "Apr" {
+          month = "04"
+        } else if parsed.month == "May" {
+          month = "05"
+        } else if parsed.month == "Jun" {
+          month = "06"
+        } else if parsed.month == "Jul" {
+          month = "07"
+        } else if parsed.month == "Aug" {
+          month = "08"
+        } else if parsed.month == "Sep" {
+          month = "09"
+        } else if parsed.month == "Oct" {
+          month = "10"
+        } else if parsed.month == "Nov" {
+          month = "11"
+        } else if parsed.month == "Dec" {
+          month = "12"
+        } else {
+          month = parsed.month
+        }
         date_str = parsed.year + "-" + month + "-" + parsed.day + "T" + parsed.time
         .timestamp = parse_timestamp!(date_str, "%Y-%m-%dT%H:%M:%S %z")
       }
