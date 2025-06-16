@@ -10,14 +10,6 @@ sources:
     extra_label_selector: app.kubernetes.io/name!=supabase-vector
 
 transforms:
-  # default_logs:
-  #   type: remap
-  #   inputs: [router.default]
-  #   source: |-
-  #     .metadata.unstructured = true
-  #     if !exists(.event_message) {
-  #        .event_message = .message
-  #     }
   project_logs:
     type: remap
     inputs:
@@ -41,7 +33,6 @@ transforms:
       storage: '.appname == "storage"'
       functions: '.appname == "functions"'
       db: '.appname == "db"'
-      analytics: '.appname == "analytics"'
   #Gotrue logs are structured json strings which frontend parses directly. But we keep metadata for consistency.
   auth_logs:
     type: remap
@@ -117,12 +108,6 @@ transforms:
       .metadata.parsed.error_severity = upcase!(.metadata.parsed.error_severity)
 
 sinks:
-  # debug_output:
-  #   type: console
-  #   inputs:
-  #     - project_logs
-  #   encoding:
-  #     codec: 'json'
   logflare_auth:
     type: 'http'
     inputs:
