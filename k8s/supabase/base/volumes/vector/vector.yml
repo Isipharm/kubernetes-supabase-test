@@ -50,37 +50,32 @@ transforms:
     inputs:
       - router.rest
     source: |-
-      parsed, err = parse_regex(.event_message, r'^(?P<day>\d+)/(?P<month>\w+)/(?P<year>\d+):(?P<time>.*)')
-      if err == null {
-        if parsed.month == "Jan" {
-          month = "01"
-        } else if parsed.month == "Feb" {
-          month = "02"
-        } else if parsed.month == "Mar" {
-          month = "03"
-        } else if parsed.month == "Apr" {
-          month = "04"
-        } else if parsed.month == "May" {
-          month = "05"
-        } else if parsed.month == "Jun" {
-          month = "06"
-        } else if parsed.month == "Jul" {
-          month = "07"
-        } else if parsed.month == "Aug" {
-          month = "08"
-        } else if parsed.month == "Sep" {
-          month = "09"
-        } else if parsed.month == "Oct" {
-          month = "10"
-        } else if parsed.month == "Nov" {
-          month = "11"
-        } else if parsed.month == "Dec" {
-          month = "12"
-        } else {
-          month = parsed.month
-        }
-        date_str = parsed.year + "-" + month + "-" + parsed.day + "T" + parsed.time
-        .timestamp = parse_timestamp!(date_str, "%Y-%m-%dT%H:%M:%S %z")
+     parsed, err = parse_regex(.event_message, r'^(?P<day>\d+)/(?P<month>\w+)/(?P<year>\d+):(?P<time>\d+:\d+:\d+)\s+\+\d+')
+      if err == null && exists(parsed.day) && exists(parsed.month) && exists(parsed.year) && exists(parsed.time) {
+        # Conversion du mois
+        month = parsed.month
+        if parsed.month == "Jan" { month = "01" }
+        else if parsed.month == "Feb" { month = "02" }
+        else if parsed.month == "Mar" { month = "03" }
+        else if parsed.month == "Apr" { month = "04" }
+        else if parsed.month == "May" { month = "05" }
+        else if parsed.month == "Jun" { month = "06" }
+        else if parsed.month == "Jul" { month = "07" }
+        else if parsed.month == "Aug" { month = "08" }
+        else if parsed.month == "Sep" { month = "09" }
+        else if parsed.month == "Oct" { month = "10" }
+        else if parsed.month == "Nov" { month = "11" }
+        else if parsed.month == "Dec" { month = "12" }
+        # Construction de la date
+        date_str = parsed.year + "-" + month + "-" + parsed.day + "T" + parsed.time + "Z"
+        # Tentative de parsing du timestamp (format simplifié, sans fuseau horaire, car %z n'est pas toujours supporté)
+        .timestamp = parse_timestamp!(date_str, "%Y-%m-%dT%H:%M:%SZ")
+        .metadata.host = .project
+        # Si le parsing du timestamp échoue, on garde le message d'origine
+      } else {
+        # Si le format n'est pas reconnu, on garde le message d'origine
+        .timestamp = .timestamp ?? now()
+        .metadata.host = .project
       }
   # Realtime logs are structured so we parse the severity level using regex (ignore time because it has no date)
   realtime_logs:
