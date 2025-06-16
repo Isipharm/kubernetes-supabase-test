@@ -50,11 +50,20 @@ transforms:
     inputs:
       - router.rest
     source: |-
-      parsed, err = parse_regex(.event_message, r'^(?P<time>.*): (?P<msg>.*)$')
+      parsed, err = parse_regex(.event_message, r'^(?P<day>\d+)/(?P<month>\w+)/(?P<year>\d+):(?P<time>.*)')
       if err == null {
-          .event_message = parsed.msg
-          .timestamp = parse_timestamp!(parsed.time, format: "%Y-%m-%dT%H:%M:%S%.f%:z")
-          .metadata.host = .project
+        month = case(
+          parsed.month == "Jan", "01",
+          parsed.month == "Feb", "02",
+          parsed.month == "Mar", "03",
+          parsed.month == "Apr", "04",
+          parsed.month == "May", "05",
+          parsed.month == "Jun", "06",
+          # ... complète pour les autres mois
+          parsed.month
+        )
+        date_str = parsed.year + "-" + month + "-" + parsed.day + "T" + parsed.time
+        .timestamp = parse_timestamp!(date_str, "%Y-%m-%dT%H:%M:%S %z")
       }
   # Realtime logs are structured so we parse the severity level using regex (ignore time because it has no date)
   realtime_logs:
