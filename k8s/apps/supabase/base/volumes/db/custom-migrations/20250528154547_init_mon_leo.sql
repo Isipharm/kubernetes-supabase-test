@@ -514,13 +514,13 @@ to authenticated
 using (true);
 
 
-CREATE TRIGGER userdeleted BEFORE DELETE ON public."ChannelUsers" FOR EACH ROW EXECUTE FUNCTION inser_msg_user_delete();
+-- CREATE TRIGGER userdeleted BEFORE DELETE ON public."ChannelUsers" FOR EACH ROW EXECUTE FUNCTION inser_msg_user_delete();
 
-CREATE TRIGGER userinserted AFTER INSERT ON public."ChannelUsers" FOR EACH ROW EXECUTE FUNCTION inser_msg_user_add();
+-- CREATE TRIGGER userinserted AFTER INSERT ON public."ChannelUsers" FOR EACH ROW EXECUTE FUNCTION inser_msg_user_add();
 
-CREATE TRIGGER channelimageupdated AFTER UPDATE OF "imageUrl" ON public."Channels" FOR EACH ROW EXECUTE FUNCTION insert_msg_channel_img_updt();
+-- CREATE TRIGGER channelimageupdated AFTER UPDATE OF "imageUrl" ON public."Channels" FOR EACH ROW EXECUTE FUNCTION insert_msg_channel_img_updt();
 
-CREATE TRIGGER channelnameupdated AFTER UPDATE OF name ON public."Channels" FOR EACH ROW EXECUTE FUNCTION insert_msg_channel_name_updt();
+-- CREATE TRIGGER channelnameupdated AFTER UPDATE OF name ON public."Channels" FOR EACH ROW EXECUTE FUNCTION insert_msg_channel_name_updt();
 
 CREATE TRIGGER update_channel_updated_on BEFORE UPDATE ON public."Channels" FOR EACH ROW EXECUTE FUNCTION update_updated_on_channels();
 

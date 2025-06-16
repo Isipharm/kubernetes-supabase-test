@@ -1,0 +1,3 @@
+service:
+  annotations:
+    service.beta.kubernetes.io/azure-dns-label-name: supabase-dev

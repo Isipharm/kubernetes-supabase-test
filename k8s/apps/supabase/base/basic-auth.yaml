@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dashboard-basic-auth
+  labels:
+    konghq.com/credential: basic-auth
+stringData:
+    username: supabase
+    password: supabase

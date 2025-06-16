@@ -7,8 +7,8 @@ spec:
   project: default
   source:
     repoURL: https://github.com/Isipharm/kubernetes-supabase-test.git
-    targetRevision: HEAD
-    path: k8s/supabase/base
+    targetRevision: main
+    path: k8s/apps/supabase/base
   destination:
     server: https://kubernetes.default.svc
     namespace: supabase

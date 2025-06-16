@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kong
+spec:
+  project: default
+  sources:
+    - repoURL: https://github.com/Isipharm/kubernetes-supabase-test.git
+      targetRevision: main
+      path: k8s/apps/kong
+    - repoURL: https://charts.konghq.com
+      targetRevision: 3.x
+      chart: ingress
+      helm:
+        valueFiles:
+          - apps/kong/overlays/dev/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: supabase
