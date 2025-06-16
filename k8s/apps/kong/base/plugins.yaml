@@ -3,6 +3,8 @@ apiVersion: configuration.konghq.com/v1
 kind: KongPlugin
 metadata:
   name: cors
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 plugin: cors
 ---
 # Key-auth plugin
@@ -10,6 +12,8 @@ apiVersion: configuration.konghq.com/v1
 kind: KongPlugin
 metadata:
   name: key-auth
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 plugin: key-auth
 config:
   hide_credentials: false
@@ -19,6 +23,8 @@ apiVersion: configuration.konghq.com/v1
 kind: KongPlugin
 metadata:
   name: anyone-acl
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 plugin: acl
 config:
   allow: ["admin","anon"]
@@ -28,6 +34,8 @@ apiVersion: configuration.konghq.com/v1
 kind: KongPlugin
 metadata:
   name: admin-acl
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 plugin: acl
 config:
   allow: ["admin"]
@@ -37,6 +45,8 @@ apiVersion: configuration.konghq.com/v1
 kind: KongPlugin
 metadata:
   name: basic-auth
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 plugin: basic-auth
 config:
   hide_credentials: true
@@ -46,6 +56,8 @@ apiVersion: configuration.konghq.com/v1
 kind: KongPlugin
 metadata:
   name: graphql-transform
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 plugin: request-transformer
 config:
   add:
@@ -58,6 +70,7 @@ metadata:
   name: anon
   annotations:
      kubernetes.io/ingress.class: kong
+     argocd.argoproj.io/sync-wave: "2"
 username: anon
 credentials:
   - anon-key-auth
@@ -68,7 +81,8 @@ kind: KongConsumer
 metadata:
   name: service-role
   annotations:
-     kubernetes.io/ingress.class: kong
+    kubernetes.io/ingress.class: kong
+    argocd.argoproj.io/sync-wave: "2"
 username: service_role
 credentials:
   - service-key-auth
@@ -79,7 +93,8 @@ kind: KongConsumer
 metadata:
   name: dashboard
   annotations:
-     kubernetes.io/ingress.class: kong
+    kubernetes.io/ingress.class: kong
+    argocd.argoproj.io/sync-wave: "2"
 username: dashboard
 credentials:
   - dashboard-basic-auth
