@@ -10,6 +10,12 @@ sources:
     extra_label_selector: app.kubernetes.io/name!=supabase-vector
 
 transforms:
+  default_logs:
+  type: remap
+  inputs: [router.default]
+  source: |-
+    .metadata.unstructured = true
+    .event_message = .event_message ?? .message
   project_logs:
     type: remap
     inputs:
