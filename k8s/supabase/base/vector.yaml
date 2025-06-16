@@ -82,24 +82,20 @@ spec:
         #     memory: "2Gi"
         #     cpu: "500m"
         env:
-        - name: VECTOR_SELF_NODE_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: spec.nodeName
-        - name: VECTOR_SELF_POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: VECTOR_SELF_POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
+        # - name: VECTOR_SELF_NODE_NAME
+        #   valueFrom:
+        #     fieldRef:
+        #       fieldPath: spec.nodeName
+        # - name: VECTOR_SELF_POD_NAME
+        #   valueFrom:
+        #     fieldRef:
+        #       fieldPath: metadata.name
+        # - name: VECTOR_SELF_POD_NAMESPACE
+        #   valueFrom:
+        #     fieldRef:
+        #       fieldPath: metadata.namespace
         - name: VECTOR_LOG
           value: "debug"
-        - name: PROCFS_ROOT
-          value: "/host/proc"
-        - name: SYSFS_ROOT
-          value: "/host/sys"
         - name:  LOGFLARE_API_KEY
           value: $(LOGFLARE_API_KEY)
         envFrom:
