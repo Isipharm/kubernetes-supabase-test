@@ -10,14 +10,14 @@ sources:
     extra_label_selector: app.kubernetes.io/name!=supabase-vector
 
 transforms:
-  default_logs:
-    type: remap
-    inputs: [router.default]
-    source: |-
-      .metadata.unstructured = true
-      if !exists(.event_message) {
-         .event_message = .message
-      }
+  # default_logs:
+  #   type: remap
+  #   inputs: [router.default]
+  #   source: |-
+  #     .metadata.unstructured = true
+  #     if !exists(.event_message) {
+  #        .event_message = .message
+  #     }
   project_logs:
     type: remap
     inputs:
@@ -35,14 +35,13 @@ transforms:
     inputs:
       - project_logs
     route:
-      auth: '.appname == "auth" || .appname == "supabase-auth"'
-      rest: '.appname == "rest" || .appname == "supabase-rest"'
-      realtime: '.appname == "realtime" || .appname == "supabase-realtime"'
-      storage: '.appname == "storage" || .appname == "supabase-storage"'
-      functions: '.appname == "functions" || .appname == "supabase-functions"'
-      db: '.appname == "db" || .appname == "supabase-db"'
+      auth: '.appname == "auth"'
+      rest: '.appname == "rest"'
+      realtime: '.appname == "realtime"'
+      storage: '.appname == "storage"'
+      functions: '.appname == "functions"'
+      db: '.appname == "db"'
       analytics: '.appname == "analytics"'
-      default: '.appname != "supabase-auth" && .appname != "supabase-rest" && .appname != "supabase-realtime" && .appname != "supabase-storage" && .appname != "supabase-functions" && .appname != "supabase-db" && .appname != "analytics"'
   #Gotrue logs are structured json strings which frontend parses directly. But we keep metadata for consistency.
   auth_logs:
     type: remap
@@ -118,17 +117,12 @@ transforms:
       .metadata.parsed.error_severity = upcase!(.metadata.parsed.error_severity)
 
 sinks:
-  debug_analytics:
-    type: console
-    inputs: [router.analytics]
-    encoding:
-      codec: json
-  debug_output:
-    type: console
-    inputs:
-      - project_logs
-    encoding:
-      codec: 'json'
+  # debug_output:
+  #   type: console
+  #   inputs:
+  #     - project_logs
+  #   encoding:
+  #     codec: 'json'
   logflare_auth:
     type: 'http'
     inputs:
