@@ -41,6 +41,7 @@ transforms:
       storage: '.appname == "supabase-storage"'
       functions: '.appname == "supabase-functions"'
       db: '.appname == "supabase-db"'
+      analytics: '.appname == "analytics" || .appname == "supabase-analytics"'
       default: '.appname != "supabase-auth" && .appname != "supabase-rest" && .appname != "supabase-realtime" && .appname != "supabase-storage" && .appname != "supabase-functions" && .appname != "supabase-db" && .appname != "supabase-analytics"'
   #Gotrue logs are structured json strings which frontend parses directly. But we keep metadata for consistency.
   auth_logs:
@@ -117,6 +118,11 @@ transforms:
       .metadata.parsed.error_severity = upcase!(.metadata.parsed.error_severity)
 
 sinks:
+  debug_analytics:
+    type: console
+    inputs: [router.analytics]
+    encoding:
+      codec: json
   debug_output:
     type: console
     inputs:
