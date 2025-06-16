@@ -15,7 +15,9 @@ transforms:
     inputs: [router.default]
     source: |-
       .metadata.unstructured = true
-      .event_message = exists(.event_message) ? .event_message : .message
+      if !exists(.event_message) {
+         .event_message = .message
+      }
   project_logs:
     type: remap
     inputs:
