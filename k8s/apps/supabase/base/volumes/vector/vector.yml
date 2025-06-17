@@ -50,8 +50,10 @@ transforms:
       # Parsing des logs d'accès (access logs)
       req, err = parse_nginx_log(.event_message, "combined")
       if err == null {
-        .timestamp, ts_err = parse_timestamp(req.timestamp, "%d/%b/%Y:%H:%M:%S %z")
-        if ts_err != null {
+        ts, ts_err = parse_timestamp(req.timestamp, "%d/%b/%Y:%H:%M:%S %z")
+        if ts_err == null {
+          .timestamp = ts
+        } else {
           .timestamp = now()
         }
         .metadata.request.headers.referer = req.referer
@@ -60,13 +62,13 @@ transforms:
         .metadata.request.method = req.method
         .metadata.request.path = req.path
         .metadata.request.protocol = req.protocol
-        .metadata.response.status_code = req.status
-      } else {
         # Parsing des logs d'erreur (error logs)
         parsed, err2 = parse_nginx_log(.event_message, "error")
         if err2 == null {
-          .timestamp, ts_err2 = parse_timestamp(parsed.timestamp, "%Y/%m/%d %H:%M:%S %z")
-          if ts_err2 != null {
+          ts2, ts_err2 = parse_timestamp(parsed.timestamp, "%Y/%m/%d %H:%M:%S %z")
+          if ts_err2 == null {
+            .timestamp = ts2
+          } else {
             .timestamp = now()
           }
           .severity = parsed.severity
