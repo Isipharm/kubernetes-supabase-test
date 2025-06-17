@@ -50,6 +50,11 @@ transforms:
       # Parsing des logs d'accès (access logs)
       req, err = parse_nginx_log(.event_message, "combined")
       if err == null {
+        # Filter out kong-ingress-controller logs
+        if includes(req.agent, "kong-ingress-controller") {
+          abort
+        }
+        
         ts, ts_err = parse_timestamp(req.timestamp, "%d/%b/%Y:%H:%M:%S %z")
         if ts_err == null {
           .timestamp = ts
