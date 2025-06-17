@@ -51,7 +51,7 @@ transforms:
       req, err = parse_nginx_log(.event_message, "combined")
       if err == null {
         # Filter out kong-ingress-controller logs
-        if contains(to_string(req.agent) ?? "", "kong-ingress-controller") {
+        if contains(to_string(req.agent), "kong-ingress-controller") {
           abort
         }
         
