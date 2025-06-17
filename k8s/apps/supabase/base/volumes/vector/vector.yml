@@ -109,7 +109,7 @@ transforms:
       parsed, err = parse_regex(.event_message, r'^(?P<time>.*): (?P<msg>.*)$')
       if err == null {
           .event_message = parsed.msg
-          ts,ts_err = parse_timestamp!(parsed.time, format: "%d/%b/%Y:%H:%M:%S %z")
+          ts,ts_err = parse_timestamp(parsed.time, format: "%d/%b/%Y:%H:%M:%S %z")
           if ts_err == null {
               .timestamp = ts
           } else {
@@ -118,7 +118,7 @@ transforms:
             .timestamp = null
             # Extraction optionnelle du niveau de sévérité
             severity_match, severity_err = parse_regex(.event_message, r'^(?P<severity>[A-Z]+):')
-            
+
             if severity_err == null {
                 .metadata.severity = severity_match.severity
             }
