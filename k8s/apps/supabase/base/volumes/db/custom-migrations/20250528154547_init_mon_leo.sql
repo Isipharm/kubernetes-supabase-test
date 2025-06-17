@@ -185,7 +185,7 @@ AS $function$DECLARE
 	existingid INTEGER;
 BEGIN	
 	-- Check if a one to one already exist
-	IF array_length(ids, 1) < 2 THEN
+	IF NOT isgroup THEN
 		SELECT channel_already_exist(ids[1], creatorid) INTO existingid;
 		IF existingid IS NOT NULL THEN
 			RETURN existingid;
