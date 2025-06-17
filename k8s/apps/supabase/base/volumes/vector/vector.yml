@@ -117,7 +117,7 @@ transforms:
             .event_message = .event_message
             .timestamp = null
             # Extraction optionnelle du niveau de sévérité
-            severity_match, severity_err = parse_regex(.event_message, r'^(?P<severity>[A-Z]+):')
+            severity_match, severity_err = parse_regex(.event_message, r'^(?P<severity>FATAL|ERROR|WARNING|INFO):')
 
             if severity_err == null {
                 .metadata.parsed.error_severity = severity_match.severity
