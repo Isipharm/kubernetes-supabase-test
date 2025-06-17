@@ -52,7 +52,7 @@ transforms:
         if contains(to_string(req.agent), "kong-ingress-controller") {
           abort
         }
-        
+
         .timestamp = req.timestamp
         .metadata.request.headers.referer = req.referer
         .metadata.request.headers.user_agent = req.agent
@@ -111,6 +111,15 @@ transforms:
           .event_message = parsed.msg
           .timestamp = parse_timestamp!(parsed.time, format: "%d/%b/%Y:%H:%M:%S %z")
           .metadata.host = .project
+      } else {
+        # Cas où la ligne ne correspond pas au pattern
+        .event_message = .event_message
+        .timestamp = null
+        # Extraction optionnelle du niveau de sévérité
+        severity_match, severity_err = parse_regex(.event_message, r'^(?P<severity>[A-Z]+):')
+        if severity_err == null {
+            .metadata.severity = severity_match.severity
+        }
       }
   # Realtime logs are structured so we parse the severity level using regex (ignore time because it has no date)
   realtime_logs:
