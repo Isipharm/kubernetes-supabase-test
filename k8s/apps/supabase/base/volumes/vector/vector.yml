@@ -9,14 +9,14 @@ sources:
     extra_label_selector: app.kubernetes.io/name!=supabase-vector
 
 transforms:
-  default_logs:
-    type: remap
-    inputs: [router.default]
-    source: |-
-      .metadata.unstructured = true
-      if !exists(.event_message) {
-         .event_message = .message
-      }
+  # default_logs:
+  #   type: remap
+  #   inputs: [router.default]
+  #   source: |-
+  #     .metadata.unstructured = true
+  #     if !exists(.event_message) {
+  #        .event_message = .message
+  #     }
   project_logs:
     type: remap
     inputs:
@@ -41,49 +41,46 @@ transforms:
       storage: '.appname == "storage"'
       functions: '.appname == "functions"'
       db: '.appname == "db"'
-      default: '.appname != "auth" && .appname != "rest" && .appname != "realtime" && .appname != "storage" && .appname != "functions" && .appname != "db" && .appname != "analytics"'
+      # default: '.appname != "auth" && .appname != "rest" && .appname != "realtime" && .appname != "storage" && .appname != "functions" && .appname != "db" && .appname != "analytics"'
   kong_logs:
     type: remap
     inputs:
       - router.kong
     source: |-
+      # Parsing des logs d'accès (access logs)
       req, err = parse_nginx_log(.event_message, "combined")
       if err == null {
-          .timestamp = req.timestamp
-          .metadata.request.headers.referer = req.referer
-          .metadata.request.headers.user_agent = req.agent
-          .metadata.request.headers.cf_connecting_ip = req.client
-          .metadata.request.method = req.method
-          .metadata.request.path = req.path
-          .metadata.request.protocol = req.protocol
-          .metadata.response.status_code = req.status
-      }
-      if err != null {
-        abort
-      }
-  # Ignores non nginx errors since they are related with kong booting up
-  kong_err:
-    type: remap
-    inputs:
-      - router.kong
-    source: |-
-      .metadata.request.method = "GET"
-      .metadata.response.status_code = 200
-      parsed, err = parse_nginx_log(.event_message, "error")
-      if err == null {
-          .timestamp = parsed.timestamp
+        .timestamp, ts_err = parse_timestamp(req.timestamp, "%d/%b/%Y:%H:%M:%S %z")
+        if ts_err != null {
+          .timestamp = now()
+        }
+        .metadata.request.headers.referer = req.referer
+        .metadata.request.headers.user_agent = req.agent
+        .metadata.request.headers.cf_connecting_ip = req.client
+        .metadata.request.method = req.method
+        .metadata.request.path = req.path
+        .metadata.request.protocol = req.protocol
+        .metadata.response.status_code = req.status
+      } else {
+        # Parsing des logs d'erreur (error logs)
+        parsed, err2 = parse_nginx_log(.event_message, "error")
+        if err2 == null {
+          .timestamp, ts_err2 = parse_timestamp(parsed.timestamp, "%Y/%m/%d %H:%M:%S %z")
+          if ts_err2 != null {
+            .timestamp = now()
+          }
           .severity = parsed.severity
           .metadata.request.host = parsed.host
           .metadata.request.headers.cf_connecting_ip = parsed.client
-          url, err = split(parsed.request, " ")
-          if err == null {
-              .metadata.request.method = url[0]
-              .metadata.request.path = url[1]
-              .metadata.request.protocol = url[2]
+          url, url_err = split(parsed.request, " ")
+          if url_err == null && length(url) == 3 {
+            .metadata.request.method = url[0]
+            .metadata.request.path = url[1]
+            .metadata.request.protocol = url[2]
           }
-      }
-      if err != null {
-        abort
+        } else {
+          abort
+        }
       }
   #Gotrue logs are structured json strings which frontend parses directly. But we keep metadata for consistency.
   auth_logs:
@@ -235,10 +232,9 @@ sinks:
     type: 'http'
     inputs:
       - kong_logs
-      - kong_err
     encoding:
       codec: 'json'
     method: 'post'
     request:
       retry_max_duration_secs: 10
-    uri: 'http://analytics:4000/api/logs?source_name=cloudflare.logs.prod&api_key=${LOGFLARE_API_KEY}'
+    uri: 'http://supabase-analytics:4000/api/logs?source_name=cloudflare.logs.prod&api_key=${LOGFLARE_API_KEY}'
