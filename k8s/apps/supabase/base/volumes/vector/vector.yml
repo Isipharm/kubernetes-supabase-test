@@ -120,7 +120,7 @@ transforms:
             severity_match, severity_err = parse_regex(.event_message, r'^(?P<severity>[A-Z]+):')
 
             if severity_err == null {
-                .metadata.severity = severity_match.severity
+                .metadata.parsed.error_severity = severity_match.severity
             }
           }
           .metadata.host = .project
