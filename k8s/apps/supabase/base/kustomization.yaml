@@ -10,7 +10,7 @@ resources:
   - rest.yaml
   - realtime.yaml
   - studio.yaml
-  - analytics.yaml
+  #- analytics.yaml
   - imgproxy.yaml
   - meta.yaml
   - functions.yaml
@@ -18,7 +18,7 @@ resources:
   #- kong-plugins.yaml
   - kong-routes.yaml
   - storage.yaml
-  - vector.yaml
+  #- vector.yaml
 
 configMapGenerator:
   # - name: common-config
