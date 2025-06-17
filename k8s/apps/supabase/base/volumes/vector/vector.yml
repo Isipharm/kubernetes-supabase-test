@@ -49,14 +49,18 @@ transforms:
     source: |-
       req, err = parse_nginx_log(.event_message, "combined")
       if err == null {
-          .timestamp = req.timestamp
-          .metadata.request.headers.referer = req.referer
-          .metadata.request.headers.user_agent = req.agent
-          .metadata.request.headers.cf_connecting_ip = req.client
-          .metadata.request.method = req.method
-          .metadata.request.path = req.path
-          .metadata.request.protocol = req.protocol
-          .metadata.response.status_code = req.status
+        if contains(to_string(req.agent), "kong-ingress-controller") {
+          abort
+        }
+        
+        .timestamp = req.timestamp
+        .metadata.request.headers.referer = req.referer
+        .metadata.request.headers.user_agent = req.agent
+        .metadata.request.headers.cf_connecting_ip = req.client
+        .metadata.request.method = req.method
+        .metadata.request.path = req.path
+        .metadata.request.protocol = req.protocol
+        .metadata.response.status_code = req.status
       }
       if err != null {
         abort
